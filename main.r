@@ -8,5 +8,8 @@ hist(cdc$Data_Value)
 cdc_Alabama = cdc %>% filter(LocationDesc == "Alabama") # Reducing the dataset to only Alabama
 cdc_Alabama_red  = cdc_Alabama %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
   select(Data_Value, Data_Value_Alt, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Age.years.,
-         Education, Gender, Income, Race.Ethnicity, StratificationCategory1, Stratification1)
+         Education, Gender, Income, Race.Ethnicity, StratificationCategory1, Stratification1, YearStart, YearEnd)
 
+### Repeating the same "study" of finding the percent of adults ages 18 years and older 
+### who have obesity for 6 years from 2011-2016. First 4 columns represent that exact percentage with
+### an appropriate CI. Other variables are indicating different categories. 
