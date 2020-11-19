@@ -62,8 +62,9 @@ model_alabama_gender = lm(Data_Value ~ Year, data = cdc_Alabama_gender)
 cdc_all_states_total = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
   select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Total)
 cdc_all_states_total[cdc_all_states_total == ""] = NA
-
-
+cdc_all_states_total = cdc_all_states_total %>% drop_na()
+plot(cdc_all_states_total$Year, cdc_all_states_total$Data_Value)
+model_all_states_total = lm(Data_Value ~ Year, data = cdc_all_states_total)
 
 
 
