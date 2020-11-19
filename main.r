@@ -55,7 +55,7 @@ cdc_Alabama_gender = cdc_Alabama %>% select(Year, Location, Class, Question, Dat
                                             Sample_Size, Total)
 cdc_Alabama_gender[cdc_Alabama_gender == ""] = NA
 cdc_Alabama_gender = cdc_Alabama_gender %>% drop_na()
-plot(cdc_Alabama_gender$Year, cdc_Alabama_gender$Data_Value) #As seen in the graph there's an evident linear pattern
+ggplot(cdc_Alabama_gender, aes(x = Year, y = Data_Value)) + geom_smooth() #As seen in the graph there's an evident linear pattern
 model_alabama_gender = lm(Data_Value ~ Year, data = cdc_Alabama_gender)
 
 # Now let's analyze "Total" for all the states
@@ -63,8 +63,11 @@ cdc_all_states_total = cdc_adjusted %>% filter(Question == "Percent of adults ag
   select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Total)
 cdc_all_states_total[cdc_all_states_total == ""] = NA
 cdc_all_states_total = cdc_all_states_total %>% drop_na()
-plot(cdc_all_states_total$Year, cdc_all_states_total$Data_Value)
-model_all_states_total = lm(Data_Value ~ Year, data = cdc_all_states_total)
+ggplot(cdc_all_states_total, aes(x = Year, y = Data_Value, colour = Location)) + geom_line()
+
+# Figuring out if the difference is statistically significant 
+model_all_states_total = lm(Data_Value ~ Year + Location, data = cdc_all_states_total)
+
 
 
 
