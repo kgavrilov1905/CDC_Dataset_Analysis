@@ -37,8 +37,33 @@ cdc_adjusted = cdc_adjusted %>% select(-Datasource, -Topic, -TopicID, -ClassID, 
 # Removing more variables... Data_Value_Footnote_Symbol, StratificationCategoryId1, StratificationID1
 cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Footnote_Symbol, -StratificationCategoryId1, -StratificationID1)
 
-# Checking whether or not Data_Value and Data_Value_Alt are different...
+# Checking whether or not Data_Value and Data_Value_Alt are different... Also going to remove Data_Value_Foot_Note 
+# If we do need it later, can join it back in
 sum(cdc$Data_Value != cdc$Data_Value_Alt, na.rm = TRUE) # Two columns are identical, hence removing Data_Value_Alt 
-cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Alt)
+cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Alt, -Data_Value_Footnote)
 
-# First 26 cases repeat twice?
+# First 26 cases repeat twice? Going to sort it by Question
+cdc_adjusted = cdc_adjusted %>% arrange(Question, Location, Year)
+
+####################################################################################
+
+# Coming back to Alabama & the 1st question, but now only with relevant variables. Will try to fit different linear models to check dependence
+cdc_Alabama = cdc_adjusted %>% filter(Location == "Alabama", Question == "Percent of adults aged 18 years and older who have obesity")
+
+# Focusing on gender ("Total" = Male + Female) & removing na rows
+cdc_Alabama_gender = cdc_Alabama %>% select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit,
+                                            Sample_Size, Total)
+cdc_Alabama_gender[cdc_Alabama_gender == ""] = NA
+cdc_Alabama_gender = cdc_Alabama_gender %>% drop_na()
+plot(cdc_Alabama_gender$Year, cdc_Alabama_gender$Data_Value) #As seen in the graph there's an evident linear pattern
+model_alabama_gender = lm(Data_Value ~ Year, data = cdc_Alabama_gender)
+
+# Now let's analyze "Total" for all the states
+cdc_all_states_total = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
+  select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Total)
+cdc_all_states_total[cdc_all_states_total == ""] = NA
+
+
+
+
+
