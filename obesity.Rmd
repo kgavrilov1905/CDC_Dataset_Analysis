@@ -1,0 +1,52 @@
+title: "DifferentState"
+author: "Kaiyan Li"
+date: "19/11/2020"
+output: pdf_document
+---
+  
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(tidyverse)
+```
+
+##Data Cleaning
+```{r}
+cdc = read.csv("Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
+# Removing LocationAbbr, and renaming LocationDesc
+cdc_adjusted = cdc %>% select(-YearEnd) %>% rename(Year = YearStart)
+cdc_adjusted = cdc_adjusted %>% select(-LocationAbbr) %>% rename(Location = LocationDesc)
+# Removing DataSource, Topic, TopicID, ClassID, QuestionID, GeoLocation, Data_Value_Unit, 
+# Data_Value_Type, DataValueTypeID
+cdc_adjusted = cdc_adjusted %>% select(-Datasource, -Topic, -TopicID, -ClassID, -QuestionID, -GeoLocation, -Data_Value_Unit, -Data_Value_Type, - DataValueTypeID)
+# Removing more variables... Data_Value_Footnote_Symbol, StratificationCategoryId1, StratificationID1
+cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Footnote_Symbol, -StratificationCategoryId1, -StratificationID1)
+#Also going to remove Data_Value_Foot_Note, Low CL, High CL
+cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Alt, -Data_Value_Footnote, -Low_Confidence_Limit, -High_Confidence_Limit  )
+```
+##End of Data Cleaning
+
+####################################################################################
+
+## Test which states have obesity percentage increase over the years
+```{r}
+#Filter out Question == "Percent of adults aged 18 years and older who have obesity" & Total == 'Total'
+total_obesity = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity" & Total == 'Total')
+n=max(total_obesity$LocationID)
+beta1=rep(NA,n)
+pvalue = rep(NA,n)
+for (i in c(1:n)){
+  subset = total_obesity %>% filter(LocationID == i)
+  if (nrow(subset) >= 3){
+    state_model = lm(Data_Value ~ Year, data=subset)
+    beta1[i] = coef(summary(state_model))[2,1]
+    pvalue[i] = coef(summary(state_model))[2,4]
+  }
+}
+#Find which states have p-values < 0.05 
+which(pvalue<0.05)
+#Whether those states have positive beta_1
+beta1[c(which(pvalue<0.05))]

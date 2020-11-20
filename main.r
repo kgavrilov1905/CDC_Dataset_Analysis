@@ -48,14 +48,14 @@ cdc_adjusted = cdc_adjusted %>% arrange(Question, Location, Year)
 ####################################################################################
 
 # Coming back to Alabama & the 1st question, but now only with relevant variables. Will try to fit different linear models to check dependence
-cdc_Alabama = cdc_adjusted %>% filter(Location == "Alabama", Question == "Percent of adults aged 18 years and older who have obesity")
+cdc_Alabama = cdc_adjusted %>% filter(Location == "Maine", Question == "Percent of adults aged 18 years and older who have obesity")
 
 # Focusing on gender ("Total" = Male + Female) & removing na rows
 cdc_Alabama_gender = cdc_Alabama %>% select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit,
                                             Sample_Size, Total)
 cdc_Alabama_gender[cdc_Alabama_gender == ""] = NA
 cdc_Alabama_gender = cdc_Alabama_gender %>% drop_na()
-ggplot(cdc_Alabama_gender, aes(x = Year, y = Data_Value)) + geom_smooth() #As seen in the graph there's an evident linear pattern
+ggplot(cdc_Alabama_gender, aes(x = Year, y = Data_Value)) + geom_point() #As seen in the graph there's an evident linear pattern
 model_alabama_gender = lm(Data_Value ~ Year, data = cdc_Alabama_gender)
 
 # Now let's analyze "Total" for all the states
@@ -65,9 +65,59 @@ cdc_all_states_total[cdc_all_states_total == ""] = NA
 cdc_all_states_total = cdc_all_states_total %>% drop_na()
 ggplot(cdc_all_states_total, aes(x = Year, y = Data_Value, colour = Location)) + geom_line()
 
+cdc_all_states_total = cdc_all_states_total %>% select(-Class, -Question, -High_Confidence_Limit, -Low_Confidence_Limit, - Sample_Size, -Total)
+cdc_all_states_total = cdc_all_states_total %>% spread(key = Year, value = Data_Value)
+
+ggplot(cdc_all_states_total, aes(x = Year, y = Data_Value, colour = Location)) + geom_point()
+model_all_states = lm(Data_Value ~ Location , data = cdc_all_states_total)
+plot(model_all_states)
+plot()
+
+
+ggplot(cdc_all_states_total, aes(x = Year, y = Data_Value, colour = Location)) + geom_line()
+cdc_Alabama = cdc_all_states_total[1:6,]
+
+plot(cdc_Alabama$Year, cdc_Alabama$Data_Value)
+model_Alabama = lm(Data_Value ~ Year + Location, data = cdc_Alabama)
+abline(model_Alabama)
+
+cdc_Alabama_Alaska = cdc_all_states_total[1:12,]
+plot(cdc_Alabama_Alaska$Year, cdc_Alabama_Alaska$Data_Value)
+model_Alabama_Alaska = lm(Data_Value ~ Year + Location, data = cdc_Alabama_Alaska)
+abline(model_Alabama_Alaska)
+
+progress = cdc_all_states_total %>% group_by(Location) %>%
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Figuring out if the difference is statistically significant 
 model_all_states_total = lm(Data_Value ~ Year + Location, data = cdc_all_states_total)
+plot(model_all_states_total)
+
+### All accept few states show significant growth in the percent of adults who have obesity. Therefore we can say that
+### the Location of the person in the country does not impact the obesity rates. There are a few outliers, however nothing
+### out of the ordinary. Now we will investigate all the subsections and possible targets as to why the obesity rates are rising
+
+cdc_gender = cdc_adjusted %>% select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit,
+                                     Sample_Size, Gender)
+cdc_gender[cdc_gender == ""] = NA
+cdc_gender = cdc_gender %>% drop_na()
+ggplot(cdc_gender, aes(x = Gender, y = Data_Value)) + geom_point()
+model_gender = lm(Data_Value ~ Gender, cdc_gender) # Apparently significant too
+
+cdc_gender_male = cdc_gender %>% filter(Gender == "Male")
+ggplot(cdc_gender_male, aes(x = Year, y = Data_Value)) + geom_point()
 
 
-
-
+### Test which states have obesity percentage increase over the years
