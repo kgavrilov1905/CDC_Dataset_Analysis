@@ -109,3 +109,6 @@ reg_coef_race = cdc_all_states_race %>% group_by(Race) %>%
 reg_coef_race %>% mutate(Race = reorder(Race, slope)) %>%
   ggplot(aes(x = Race, y = slope, fill = Race)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+
+
+
