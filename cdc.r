@@ -9,7 +9,7 @@ unique(cdc$YearStart) # Going 1 by 1 and checking each column...
 
 # Need to see if each instance of YearStart == YearEnd, then can remove YearEnd & rename the column
 sum(cdc$YearStart != cdc$YearEnd) # The sum is zero, hence remove & rename 
-cdc_adjusted = cdc %>% select(-YearEnd) %>% rename(Year = YearStart)
+cdc_adjusted = cdc %>% select(-YearEnd) %>% rename(Year = YearStart, Age = Age.years.)
 
 # Removing LocationAbbr, LocationID and renaming LocationDesc
 cdc_adjusted = cdc_adjusted %>% select(-LocationAbbr, -LocationID) %>% rename(Location = LocationDesc)
@@ -29,7 +29,8 @@ cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Alt, -Data_Value_Footnote)
 
 # First 26 cases repeat twice? Going to sort it by Question
 cdc_adjusted = cdc_adjusted %>% arrange(Question, Location, Year)
-
+#Removing Virigin Islands because they have observations for only 2016
+cdc_adjusted = cdc_adjusted[!(cdc_adjusted$Location == "Virgin Islands"),]
 
 # Now let's analyze "Total" for all the states
 cdc_all_states_total = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
@@ -39,7 +40,9 @@ cdc_all_states_total = cdc_all_states_total %>% drop_na()
 ggplot(cdc_all_states_total, aes(x = Year, y = Data_Value, colour = Location)) + geom_line()
 
 reg_coef_all_states = cdc_all_states_total %>% group_by(Location) %>%
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"]) 
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4]) 
+cdc_reduced = reg_coef_all_states %>% filter(pvalue < 0.05) %>% select(Location) %>% left_join(cdc_adjusted)
 # Only 2 states show negative slope & National is showing 0.43 regression coefficient which is strong
 
 # Plotting to see which states are particularly affected
@@ -49,29 +52,35 @@ reg_coef_all_states %>% mutate(Location = reorder(Location, slope)) %>%
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
 
 # Now will check for gender
-cdc_all_states_gender = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
+cdc_all_states_gender = cdc_reduced %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
   select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Gender)
 cdc_all_states_gender[cdc_all_states_gender == ""] = NA
 cdc_all_states_gender = cdc_all_states_gender %>% drop_na() %>% arrange(Gender)
 
 reg_coef_gender = cdc_all_states_gender %>% group_by(Gender) %>%
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4])
 reg_coef_gender %>% mutate(Gender = reorder(Gender, slope)) %>%
   ggplot(aes(x = Gender, y = slope, fill = Gender)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
 
+
 # Now checking for Age
 cdc_all_states_age = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
-  select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Age.years.) %>%
-  rename(Age = Age.years.)
+  select(Year, Location, Class, Question, Data_Value, Low_Confidence_Limit, High_Confidence_Limit, Sample_Size, Age)
 cdc_all_states_age[cdc_all_states_age == ""] = NA
 cdc_all_states_age = cdc_all_states_age %>% drop_na() %>% arrange(Age)
+cdc_all_states_age %>% filter(Age == "55 - 64") %>% ggplot(aes(x = Year, y = Data_Value, colour = Location)) +
+  geom_line()
 
 reg_coef_age = cdc_all_states_age %>% group_by(Age) %>%
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4])
 reg_coef_age %>% mutate(Age = reorder(Age, slope)) %>%
   ggplot(aes(x = Age, y = slope, fill = Age)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+
+cdc_reduced = cdc_reduced[!(cdc_reduced$Age == pull(reg_coef_age %>% filter(pvalue >= 0.05) %>% select(Age))),]
 
 # Checking for Education
 cdc_all_states_education = cdc_adjusted %>% filter(Question == "Percent of adults aged 18 years and older who have obesity") %>%
@@ -80,7 +89,8 @@ cdc_all_states_education[cdc_all_states_education == ""] = NA
 cdc_all_states_education = cdc_all_states_education %>% drop_na() %>% arrange(Education)
 
 reg_coef_education = cdc_all_states_education %>% group_by(Education) %>% 
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4])
 reg_coef_education %>% mutate(Education = reorder(Education, slope)) %>%
   ggplot(aes(x = Education, y = slope, fill = Education)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
@@ -92,7 +102,8 @@ cdc_all_states_income[cdc_all_states_income == ""] = NA
 cdc_all_states_income = cdc_all_states_income %>% drop_na() %>% arrange(Income)
 
 reg_coef_income = cdc_all_states_income %>% group_by(Income) %>%
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4])
 reg_coef_income %>% mutate(Income = reorder(Income, slope)) %>%
   ggplot(aes(x = Income, y = slope, fill = Income)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
@@ -105,10 +116,17 @@ cdc_all_states_race[cdc_all_states_race == ""] = NA
 cdc_all_states_race = cdc_all_states_race%>% drop_na() %>% arrange(Race)
 
 reg_coef_race = cdc_all_states_race %>% group_by(Race) %>%
-  summarize(slope = lm(Data_Value ~ Year)$coef["Year"])
+  summarize(slope = lm(Data_Value ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value ~ Year)))[2,4])
 reg_coef_race %>% mutate(Race = reorder(Race, slope)) %>%
   ggplot(aes(x = Race, y = slope, fill = Race)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
 
+reg_coef_race %>% filter(pvalue < 0.05) %>% select(Race)
+cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "2 or more races"),]
+cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "American Indian/Alaska Native"),]
+cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Hawaiian/Pacific Islander"),]
+cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Non-Hispanic Black"),]
+cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Other"),]
 
 
