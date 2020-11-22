@@ -129,4 +129,26 @@ cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Hawaiian/Pacific Isla
 cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Non-Hispanic Black"),]
 cdc_reduced = cdc_reduced[!(cdc_reduced$Race.Ethnicity == "Other"),]
 
+# Cleaning the environment
+rm(cdc_all_states_age, cdc_all_states_education, cdc_all_states_gender, cdc_all_states_income,
+   cdc_all_states_total, cdc_all_states_race, reg_coef_age, reg_coef_all_states, reg_coef_education,
+   reg_coef_gender, reg_coef_income, reg_coef_race)
+
+#######################################################################################
+
+# Want to see if there's any relationship between increasing obesity rates and veggie intake
+
+# For instance if we take Alabama 
+
+cdc_Alabama_obese = cdc_reduced %>% filter(Location == "Alabama") %>% 
+  filter(Question == "Percent of adults aged 18 years and older who have obesity") %>% 
+  spread(key = Question, value = Data_Value) %>% rename("Obesity" = "Percent of adults aged 18 years and older who have obesity")
+
+cdc_Alabama_veggie = cdc_reduced %>% filter(Location == "Alabama" & Question == "Percent of adults who report consuming vegetables less than one time daily") %>%
+  spread(key = Question, value = Data_Value) %>% rename("Veggie" = "Percent of adults who report consuming vegetables less than one time daily")
+temp_join = cdc_Alabama_obese %>% right_join(cdc_Alabama_veggie, by = c("Year", "Total", "Age", "Education", "Gender", "Income", "Race.Ethnicity")) %>%
+  select(Year, Obesity, Veggie)
+
+plot(temp_join$Veggie, temp_join$Obesity)
+abline(lm(Obesity ~ Veggie, data = temp_join))
 
