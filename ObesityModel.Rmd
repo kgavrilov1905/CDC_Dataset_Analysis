@@ -1,0 +1,73 @@
+---
+title: "ObesityModel"
+author: "Kaiyan Li"
+date: "21/11/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+cdc = read.csv("Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
+
+# Removing LocationAbbr, and renaming LocationDesc
+cdc_adjusted = cdc %>% select(-YearEnd) %>% rename(Year = YearStart)
+cdc_adjusted = cdc_adjusted %>% select(-LocationAbbr) %>% rename(Location = LocationDesc)
+
+# Removing DataSource, Topic, TopicID, ClassID, GeoLocation, Data_Value_Unit, 
+# Data_Value_Type, DataValueTypeID
+cdc_adjusted = cdc_adjusted %>% select(-Datasource, -Topic, -TopicID, -ClassID, -GeoLocation, -Data_Value_Unit, -Data_Value_Type, - DataValueTypeID)
+
+# Removing more variables... Data_Value_Footnote_Symbol, StratificationCategoryId1, StratificationID1
+cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Footnote_Symbol, -StratificationCategoryId1, -StratificationID1)
+
+#Also going to remove Data_Value_Foot_Note, Low CL, High CL
+cdc_adjusted = cdc_adjusted %>% select(-Data_Value_Alt, -Data_Value_Footnote, -Low_Confidence_Limit, -High_Confidence_Limit )
+```
+
+```{r}
+#Percent of adults who report consuming fruit less than one time daily
+Q18 <- cdc_adjusted %>% filter(QuestionID == 'Q018' )%>%select(-QuestionID)
+
+#Percent of adults who report consuming vegetables less than one time daily
+Q19 <- cdc_adjusted %>% filter(QuestionID == 'Q019' )%>%select(-QuestionID)
+
+#Percent of adults aged 18 years and older who have obesity
+Q36 <- cdc_adjusted %>% filter(QuestionID == 'Q036' )%>%select(-QuestionID)
+
+#Percent of adults aged 18 years and older who have an overweight classification
+Q37 <- cdc_adjusted %>% filter(QuestionID == 'Q037' )%>%select(-QuestionID)
+
+#Percent of adults who achieve at least 150 minutes a week of moderate-intensity aerobic physical activity or 75 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
+Q43 <- cdc_adjusted %>% filter(QuestionID == 'Q043' )%>%select(-QuestionID)
+
+#Percent of adults who achieve at least 150 minutes a week of moderate-intensity aerobic physical activity or 75 minutes a week of vigorous-intensity aerobic physical activity and engage in muscle-strengthening activities on 2 or more days a week
+Q44 <- cdc_adjusted %>% filter(QuestionID == 'Q044' )%>%select(-QuestionID)
+
+#Percent of adults who achieve at least 300 minutes a week of moderate-intensity aerobic physical activity or 150 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
+Q45 <- cdc_adjusted %>% filter(QuestionID == 'Q045' )%>%select(-QuestionID)
+
+#Percent of adults who engage in muscle-strengthening activities on 2 or more days a week
+Q46 <- cdc_adjusted %>% filter(QuestionID == 'Q046' )%>%select(-QuestionID)
+
+#Percent of adults who engage in no leisure-time physical activity
+Q47 <- cdc_adjusted %>% filter(QuestionID == 'Q047' )%>%select(-QuestionID)
+```
+
+```{r}
+Q18 = Q18 %>% rename(Class18=Class,Question18=Question, Data_Value18=Data_Value, Sample_Size18=Sample_Size)
+Q19 = Q19 %>% rename(Class19=Class,Question19=Question, Data_Value19=Data_Value, Sample_Size19=Sample_Size)
+Q36 = Q36 %>% rename(Class36=Class,Question36=Question, Data_Value36=Data_Value, Sample_Size36=Sample_Size)
+Q47 = Q47 %>% rename(Class47=Class,Question47=Question, Data_Value47=Data_Value, Sample_Size47=Sample_Size)
+
+total <- inner_join(Q18,Q19,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
+total <-inner_join(total,Q36,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
+total <-inner_join(total,Q47,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
+
+model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
+summary(model)
+```
+
