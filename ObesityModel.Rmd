@@ -22,6 +22,12 @@ Center for Disease Control (CDC) collected data from 2011-2016 in all states of 
 * Percent of adults who achieve at least 300 minutes a week of moderate-intensity aerobic physical activity or 150 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
 * Percent of adults who engage in no leisure-time physical activity
 
+Our objective is to find whether or not there's relationship between any of these classifications. We would like to answer these questions: 
+
+1. Is there relationship between obesity rates and fruit/vegetable intake alongside physical activity?
+2. Is there evidence that obesity rates in USA are growing?
+3. Add more later
+
 
 ```{r}
 library(tidyverse)
