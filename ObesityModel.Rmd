@@ -1,6 +1,6 @@
 ---
 title: "ObesityModel"
-author: "Kaiyan Li"
+author: "Kaiyan Li, Kirill Gavrilov, Victor Wang"
 date: "21/11/2020"
 output: pdf_document
 ---
@@ -8,6 +8,20 @@ output: pdf_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Introduction
+Center for Disease Control (CDC) collected data from 2011-2016 in all states of America. In particular, responses were sampled for 9 different categories: 
+
+* Percent of adults aged 18 years and older who have obesity
+* Percent of adults aged 18 years and older who have an overweight classification
+* Percent of adults who report consuming fruit less than one time daily
+* Percent of adults who report consuming vegetables less than one time daily
+* Percent of adults who engage in muscle-strengthening activities on 2 or more days a week
+* Percent of adults who achieve at least 150 minutes a week of moderate-intensity aerobic physical activity or 75 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
+* Percent of adults who achieve at least 150 minutes a week of moderate-intensity aerobic physical activity or 75 minutes a week of vigorous-intensity aerobic physical activity and engage in muscle-strengthening activities on 2 or more days a week
+* Percent of adults who achieve at least 300 minutes a week of moderate-intensity aerobic physical activity or 150 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
+* Percent of adults who engage in no leisure-time physical activity
+
 
 ```{r}
 library(tidyverse)
@@ -56,6 +70,10 @@ Q46 <- cdc_adjusted %>% filter(QuestionID == 'Q046' )%>%select(-QuestionID)
 #Percent of adults who engage in no leisure-time physical activity
 Q47 <- cdc_adjusted %>% filter(QuestionID == 'Q047' )%>%select(-QuestionID)
 ```
+
+The question we would to like is answer: Is there any relationship between between *national obesity* rates and contributors such as
+* Percent of adults who consume fruit
+
 
 ```{r}
 Q18 = Q18 %>% rename(Class18=Class,Question18=Question, Data_Value18=Data_Value, Sample_Size18=Sample_Size)
