@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE,
 ```
 
 # Introduction
-Center for Disease Control (CDC) collected data from 2011-2016 in all states of America. In particular, responses were sampled for 9 different categories: 
+Center for Disease Control (CDC) collected data from distinct demographic groups in 2011-2016 in all states of America. In particular, responses were sampled for 9 different categories: 
 
 * Percent of adults aged 18 years and older who have obesity
 * Percent of adults aged 18 years and older who have an overweight classification
@@ -22,6 +22,7 @@ Center for Disease Control (CDC) collected data from 2011-2016 in all states of 
 * Percent of adults who achieve at least 150 minutes a week of moderate-intensity aerobic physical activity or 75 minutes a week of vigorous-intensity aerobic physical activity and engage in muscle-strengthening activities on 2 or more days a week
 * Percent of adults who achieve at least 300 minutes a week of moderate-intensity aerobic physical activity or 150 minutes a week of vigorous-intensity aerobic activity (or an equivalent combination)
 * Percent of adults who engage in no leisure-time physical activity
+
 
 Our objective is to find whether or not there's relationship between any of these classifications. We would like to answer these questions: 
 
@@ -43,7 +44,7 @@ cdc_adjusted = cdc_adjusted[!(cdc_adjusted$Location == "Virgin Islands"),]
 ```
 
 
-```{r}
+```{r echo = FALSE}
 #Percent of adults who report consuming fruit less than one time daily
 Q18 <- cdc_adjusted %>% filter(QuestionID == 'Q018' )%>%select(-QuestionID) %>%
   rename(Class18=Class,Question18=Question, Data_Value18=Data_Value, Sample_Size18=Sample_Size)
@@ -90,17 +91,25 @@ anova(model)
 ```
 
 
-Analyzing the ordinary least squares model that obesity rates to the year in order to conclude growing obesity rate in every state. 
-```{r}
-model_all_states = lm(Data_Value36 ~ Year, data = Q36)
-```
-
-P-value for the model does seem to indicated that there's evidence of significant relationship between obesity rates and year, however the R-squared is extremely low. Let's investigate more closely. 
-
+## Analysis of total obesity rates for every state
+Analyzing the ordinary least squares model of how obesity rates relate to the year in order to conclude growing obesity rate in the country. Specifically, we will look at the "Total" category which represents the final obesity percentage for each state in a particular year from each demographic.
 ```{r}
 Q36 = Q36 %>% select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, Total) %>% arrange(Location)
 Q36[Q36 == ""] = NA
 Q36 = Q36 %>% drop_na()
+model_all_states = lm(Data_Value36 ~ Year, data = Q36)
+summary(model_all_states)
+```
+
+P-value for the model does seem to indicated that there's evidence of significant relationship between obesity rates and year, however the R-squared is extremely low. Let's take a look at the residuals.
+
+```{r fig.show = "hold", out.width = "50%"}
+par(mar = c(4, 4, 0.1, 0.1))
+plot(model_all_states, which = c(2,2))
+plot(model_all_states, which = c(4,4))
+```
+
+```{r message = FALSE}
 ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line()
 
 reg_coef_all_states = Q36 %>% group_by(Location) %>%
@@ -111,12 +120,20 @@ Q36_reduced = reg_coef_all_states %>% filter(pvalue<0.05) %>% left_join(Q36)
 
 ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), colour = "grey", alpha = 0.4) +
   geom_smooth(Q36_reduced, mapping = aes(x = Year, y = Data_Value36), colour = "red") +
-  geom_line(Q36_reduced, mapping = aes(x = Year, y = Data_Value36, colour = Location), alpha = 0.3) + 
+  geom_line(Q36_reduced, mapping = aes(x = Year, y = Data_Value36, colour = Location), alpha = 0.35) + 
   geom_smooth(colour = "black")
 ```
 
 ```{r}
 model_updated = lm(Data_Value36 ~ Year, data = Q36_reduced)
+summary(model_updated)
+```
+
+
+```{r fig.show = "hold", out.width = "50%"}
+par(mar = c(4, 4, 0.1, 0.1))
+plot(model_updated, which = c(2,2))
+plot(model_updated, which = c(4,4))
 ```
 
 
