@@ -82,11 +82,41 @@ total <-inner_join(total,Q47,by=c("Year","Location","Total", "Age.years.", "Educ
 
 ```
 
-We now want to analyze the ordinary least squares model that related obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity 
+We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity 
 ```{r}
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
 summary(model)
 anova(model)
+```
+
+
+Analyzing the ordinary least squares model that obesity rates to the year in order to conclude growing obesity rate in every state. 
+```{r}
+model_all_states = lm(Data_Value36 ~ Year, data = Q36)
+```
+
+P-value for the model does seem to indicated that there's evidence of significant relationship between obesity rates and year, however the R-squared is extremely low. Let's investigate more closely. 
+
+```{r}
+Q36 = Q36 %>% select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, Total) %>% arrange(Location)
+Q36[Q36 == ""] = NA
+Q36 = Q36 %>% drop_na()
+ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line()
+
+reg_coef_all_states = Q36 %>% group_by(Location) %>%
+  summarize(slope = lm(Data_Value36 ~ Year)$coef["Year"],
+            pvalue = coef(summary(lm(Data_Value36 ~ Year)))[2,4]) 
+
+Q36_reduced = reg_coef_all_states %>% filter(pvalue<0.05) %>% left_join(Q36)
+
+ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), colour = "grey", alpha = 0.4) +
+  geom_smooth(Q36_reduced, mapping = aes(x = Year, y = Data_Value36), colour = "red") +
+  geom_line(Q36_reduced, mapping = aes(x = Year, y = Data_Value36, colour = Location), alpha = 0.3) + 
+  geom_smooth(colour = "black")
+```
+
+```{r}
+model_updated = lm(Data_Value36 ~ Year, data = Q36_reduced)
 ```
 
 
