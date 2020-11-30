@@ -34,6 +34,7 @@ Our objective is to find whether or not there's relationship between any of thes
 Firstly we need to analyze the original dataset, remove all the unnecessary variables and observations.
 ```{r message = FALSE}
 library(tidyverse)
+library(faraway)
 cdc = read.csv("Nutrition__Physical_Activity__and_Obesity_-_Behavioral_Risk_Factor_Surveillance_System.csv")
 
 # Removing LocationAbbr, and renaming LocationDesc, DataSource, Topic, TopicID, ClassID, GeoLocation, Data_Value_Unit, Data_Value_Type, DataValueTypeID, Data_Value_Footnote_Symbol, StratificationCategoryId1, StratificationID1
@@ -80,14 +81,51 @@ Q47 <- cdc_adjusted %>% filter(QuestionID == 'Q047' )%>%select(-QuestionID) %>%
 total <- inner_join(Q18,Q19,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
 total <-inner_join(total,Q36,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
 total <-inner_join(total,Q47,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
-
+total <- total%>% select(-Class18,-Class19,-Class36,-Class47, -Question18,-Question19,-Question36,-Question47)%>%drop_na()%>%rename(Age=Age.years.)
 ```
 
 We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity 
 ```{r}
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
 summary(model)
-anova(model)
+#Using Backward Elimination method, remove the variable Data_Value19
+model <- lm(Data_Value36 ~ Data_Value18 + Data_Value47, data=total)
+summary(model)
+#Test if collinearity problem exists
+vif(model)  # < 10, no serious collinearity problem
+
+plot(model)
+# From the Residuals vs Fitted plot, the residuals are uncorrelated and the constant variance assumption is satisfied.
+# From the Normal Q-Q plot, the residuals are not normally distributed.
+```
+
+# Try to fit different models
+$$ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i$$
+```{r}
+model_age <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Age, data=total)
+summary(model_age)
+# The result is significantly different for each age group.
+ggplot(data = total) + 
+  geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, color = Age))
+ggplot(data = total) + 
+  geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, color = Age))
+# The plot indicates different models should be used for each age group.
+
+model_gender <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Gender, data=total)
+summary(model_gender) 
+
+model_income <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Income, data=total)
+summary(model_income)
+
+model_education <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Education, data=total)
+summary(model_education)
+
+model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, data=total)
+summary(model_race)
+ggplot(data = total) + 
+  geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, color = Race.Ethnicity))
+ggplot(data = total) + 
+  geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, color = Race.Ethnicity))
 ```
 
 
