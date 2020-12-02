@@ -131,6 +131,8 @@ ggplot(data = total) +
 
 ## Analysis of total obesity rates for every state
 Analyzing the ordinary least squares model of how obesity rates relate to the year in order to conclude growing obesity rate in the country. Specifically, we will look at the "Total" category which represents the final obesity percentage for each state in a particular year.
+
+$$ obesity =\beta_0 + \beta_1year + \epsilon$$
 ```{r}
 Q36 = Q36 %>% select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, Total) %>% arrange(Location)
 Q36[Q36 == ""] = NA
@@ -163,12 +165,12 @@ Q36_reduced = reg_coef_all_states %>% filter(pvalue<0.05) %>% left_join(Q36)
 ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), colour = "grey", alpha = 0.4) +
   geom_smooth(Q36_reduced, mapping = aes(x = Year, y = Data_Value36), colour = "red") +
   geom_line(Q36_reduced, mapping = aes(x = Year, y = Data_Value36, colour = Location), alpha = 0.35) + 
-  geom_smooth(colour = "black")
+  geom_smooth(colour = "black") +
+  ggtitle("2011-2016 National Obesity Rates") + xlab("Year") + ylab("Obesity %")
 ```
 Particular image represents total obesity rates graph of observations for all states. Lines in grey colour are the states that do not show significant increase in obesity rates in 6 years. That was deducted by building an individual linear model for each state versus year. If the p-value was greater than 0.05, that state is considered to not have increasing obesity rates. In contrary, coloured lines indicate growing obesity rates. Further more, red and black lines show the full model slope for both, all states and states with growing obesity rates respectively. 
 
 We can investigate this further by looking more closely at the observations. States that have relatively low obesity rates in 2011, tend to maintain that trend and hold obesity rates constant. On the other hand, states with higher obesity rates initially, show evidence of increasing rates.
-
 
 ```{r}
 model_updated = lm(Data_Value36 ~ Year, data = Q36_reduced)
@@ -181,6 +183,9 @@ par(mar = c(4, 4, 0.1, 0.1))
 plot(model_updated, which = c(2,2))
 plot(model_updated, which = c(4,4))
 ```
+Taking a look at the updated model for obesity rates over the years, there's a substantial increase in the value of intercept coefficient and slope remains relatively the same. Residuals appear to be in good shape with slight deviation from the Normal line and do not violate the independence assumption. 
+
+
 
 
 
