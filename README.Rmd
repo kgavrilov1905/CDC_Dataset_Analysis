@@ -3,8 +3,10 @@ title: "ObesityModel"
 author: "Kaiyan Li, Kirill Gavrilov, Victor Wang"
 date: "28/11/2020"
 output:
-    md_document:
-      variant: "markdown_github"
+  github_document:
+    html_preview: false
+editor_options:
+  chunk_out_type: console
 ---
 
 ```{r setup, include=FALSE}
