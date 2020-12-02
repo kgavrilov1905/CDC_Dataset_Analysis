@@ -97,6 +97,10 @@ vif(model)  # < 10, no serious collinearity problem
 plot(model)
 # From the Residuals vs Fitted plot, the residuals are uncorrelated and the constant variance assumption is satisfied.
 # From the Normal Q-Q plot, the residuals are not normally distributed.
+
+# Let's try to do robust model to see if maybe that model is more applicable in our case
+model_robust = rlm(Data_Value36 ~ Data_Value18 + Data_Value47, data=total)
+summary(model_robust)$coefficient
 ```
 
 # Try to fit different models
