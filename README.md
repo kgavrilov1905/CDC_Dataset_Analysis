@@ -105,6 +105,16 @@ Plotting the same graph but for different ethnic demographic.
 Once again, racial classification does not seem to give us any type of
 insight.
 
+-----
+
+To answer the second question, visualization of obesity rates per year
+is the most appropriate way to understand what data we are dealing with.
+
+<img src="figures/ggplotObsYear-1.png" ></img>
+
+It is not evident which states are showing a positive relationship and
+whether or not it is strong.
+
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
 to make it unique. Since we are mainly going to be working with the
@@ -466,6 +476,13 @@ summary(model_all_states)
 P-value for the model does seem to indicated that there’s evidence of
 significant relationship between obesity rates and year, however the
 R-squared is extremely low. Let’s take a look at the residuals.
+
+``` r
+ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line() + ggtitle("2011-2016 Obesity Rates By State") + 
+    xlab("Year") + ylab("% of adults who have obesity")
+```
+
+![](figures/ggplotObsYear-1.png)<!-- -->
 
 ``` r
 par(mar = c(4, 4, 0.1, 0.1))
