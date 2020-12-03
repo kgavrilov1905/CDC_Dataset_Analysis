@@ -170,7 +170,7 @@ vif(model)  # < 10, no serious collinearity problem
 plot(model)
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->![](ObesityModel_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->![](ObesityModel_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->![](ObesityModel_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
+![something](figures/OriginalModel-1.png)![something](figures/OriginalModel-2.png)![something](figures/OriginalModel-3.png)![something](figures/OriginalModel-4.png)
 
 ``` r
 # From the Residuals vs Fitted plot, the residuals are uncorrelated and the
@@ -247,14 +247,14 @@ ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value
     color = Age))
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](figures/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
     color = Age))
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](figures/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 # The plot indicates different models should be used for each age group.
@@ -408,14 +408,14 @@ ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value
     color = Race.Ethnicity))
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](figures/unnamed-chunk-3-3.png)<!-- -->
 
 ``` r
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
     color = Race.Ethnicity))
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->
+![](figures/unnamed-chunk-3-4.png)<!-- -->
 
 ## Analysis of total obesity rates for every state
 
@@ -464,7 +464,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="ObesityModel_files/figure-gfm/unnamed-chunk-6-1.png" width="50%" /><img src="ObesityModel_files/figure-gfm/unnamed-chunk-6-2.png" width="50%" />
+<img src="figures/unnamed-chunk-5-1.png" width="50%" /><img src="figures/unnamed-chunk-5-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -494,16 +494,15 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](ObesityModel_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
-Particular image represents total obesity rates graph of observations
-for all states. Lines in grey colour are the states that do not show
-significant increase in obesity rates in 6 years. That was deducted by
-building an individual linear model for each state versus year. If the
-p-value was greater than 0.05, that state is considered to not have
-increasing obesity rates. In contrary, coloured lines indicate growing
-obesity rates. Further more, red and black lines show the full model
-slope for both, all states and states with growing obesity rates
-respectively.
+![](figures/unnamed-chunk-6-1.png)<!-- --> Particular image represents
+total obesity rates graph of observations for all states. Lines in grey
+colour are the states that do not show significant increase in obesity
+rates in 6 years. That was deducted by building an individual linear
+model for each state versus year. If the p-value was greater than 0.05,
+that state is considered to not have increasing obesity rates. In
+contrary, coloured lines indicate growing obesity rates. Further more,
+red and black lines show the full model slope for both, all states and
+states with growing obesity rates respectively.
 
 We can investigate this further by looking more closely at the
 observations. States that have relatively low obesity rates in 2011,
@@ -541,7 +540,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="ObesityModel_files/figure-gfm/unnamed-chunk-9-1.png" width="50%" /><img src="ObesityModel_files/figure-gfm/unnamed-chunk-9-2.png" width="50%" />
+<img src="figures/unnamed-chunk-8-1.png" width="50%" /><img src="figures/unnamed-chunk-8-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape
