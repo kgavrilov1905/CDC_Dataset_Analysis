@@ -73,7 +73,7 @@ of these classifications. We would like to answer these questions:
 2.  Is there evidence that *obesity rates* in the USA are growing?
 3.  Add more later
 
-<img src="figures/ggplotObsPhysAge.png" ></img>
+<img src="figures/ggplotObsPhysAge-1.png" ></img>
 
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
