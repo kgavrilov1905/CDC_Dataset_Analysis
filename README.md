@@ -115,6 +115,8 @@ is the most appropriate way to understand what data we are dealing with.
 It is not evident which states are showing a positive relationship and
 whether or not it is strong.
 
+\#Methods
+
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
 to make it unique. Since we are mainly going to be working with the

@@ -73,6 +73,8 @@ To answer the second question, visualization of obesity rates per year is the mo
 
 It is not evident which states are showing a positive relationship and whether or not it is strong. 
 
+#Methods
+
 Firstly we need to analyze the original dataset, remove all the unnecessary variables and observations, add a new point to the dataset to make it unique. Since we are mainly going to be working with the obesity percentage data points, we will fill in the missing value for obesity % in Alabama in 2011, specifically for "Other" ethnicity. Particular value was chosen by looking at near by states at that year for that demographic. 
 ```{r message = FALSE}
 library(tidyverse)
@@ -212,7 +214,7 @@ summary(model_all_states)
 
 P-value for the model does seem to indicated that there's evidence of significant relationship between obesity rates and year, however the R-squared is extremely low. Let's take a look at the residuals.
 
-```{r ggplotObsYear}
+```{r ggplotObsYear, fig.width = 10}
 ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line() +
   ggtitle("2011-2016 Obesity Rates By State") + xlab("Year") + ylab("% of adults who have obesity")
 ```
