@@ -6,9 +6,9 @@ Kaiyan Li, Kirill Gavrilov, Victor Wang
 # Abstract
 
 The prevalence of obesity has increased in the United States in the past
-decades \[1\]. A wide range of medical complications of obesity, such as
+\(decades^1\). A wide range of medical complications of obesity, such as
 diabetes, hypertension, heart disease, respiratory disease,
-significantly reduced patients’ quality of life.2 This statistical
+significantly reduced patients’ quality of \(life^2\). This statistical
 analysis provides time trends for adults over 18 years old are
 classified to have obesity (body mass index (BMI) \> 30) from 2011-2016,
 using data from Center for Disease Control and Prevention (CDC).
@@ -18,23 +18,23 @@ physical activity levels.
 # Introduction
 
 Over the last three decades, mean body mass index (BMI; kg/m2) has
-increased by 0.4 kg/m2 per decade.3 The United States has the highest
-mean BMI among high-income countries, leading to one in four adults
-having a BMI \> 30 kg/m2 based on self-reported height and weight.4 This
-study analyses data from the Center for Disease Control and Prevention
-(CDC) collected over 6 years from 2011-2016 in all states of America.
-Each data point represents a proportion of people that fall under a
-particular demographic. Individuals are classified into age, income,
-gender, education and ethnic categories. Aside from obesity rates, the
-data also includes proportions of people with specific food intake
-habits, as well as various physical activity levels. Our goal is to
-determine the existence of a relationship between obesity rates and
-lifestyle choices of patients. We will be inspecting how obesity rates
-may relate to percent of people that consume fruits and vegetables less
-than one time per day and do not engage in leisure time physical
-activity. Additional analysis will be performed to confirm the
-increasing levels of obesity in the United States and precisely identify
-a state with significant evidence.
+increased by 0.4 kg/m2 per \(decade^3\). The United States has the
+highest mean BMI among high-income countries, leading to one in four
+adults having a BMI \> 30 kg/m2 based on self-reported height and
+\(weight^4\). This study analyses data from the Center for Disease
+Control and Prevention (CDC) collected over 6 years from 2011-2016 in
+all states of America. Each data point represents a proportion of people
+that fall under a particular demographic. Individuals are classified
+into age, income, gender, education and ethnic categories. Aside from
+obesity rates, the data also includes proportions of people with
+specific food intake habits, as well as various physical activity
+levels. Our goal is to determine the existence of a relationship between
+obesity rates and lifestyle choices of patients. We will be inspecting
+how obesity rates may relate to percent of people that consume fruits
+and vegetables less than one time per day and do not engage in leisure
+time physical activity. Additional analysis will be performed to confirm
+the increasing levels of obesity in the United States and precisely
+identify a state with significant evidence.
 
 # Data Description
 
@@ -65,15 +65,45 @@ gender. Each group was sampled for 9 different categories:
     combination)
   - Percent of adults who engage in no leisure-time physical activity
 
-Our objective is to find whether or not there’s relationship between any
-of these classifications. We would like to answer these questions:
+In this study we would like to answer the following questions:
 
 1.  Is there relationship between *obesity rates* and *fruit/vegetable
     intake alongside physical activity*?
-2.  Is there evidence that *obesity rates* in the USA are growing?
-3.  Add more later
+2.  Is there significant evidence that *obesity rates* in the USA are
+    growing? If so, for which states?
+
+To get a sense of what to anticipate for the upcoming analysis, we will
+plot classifications of interest versus obesity rates. Age category is
+crucial to investigate, therefore we will start by plotting this obesity
+rates versus physical activity for each age demographic.
 
 <img src="figures/ggplotObsPhysAge-1.png" ></img>
+
+There’s a fairly evident pattern seen form the plot, however needs
+further analysis on the strength.
+
+Now plotting the same graph but for different ethnic demographic.
+
+<img src="figures/ggplotObsPhysRace-1.png" ></img>
+
+This plot does not give us much insight on a relationship between
+obesity levels and physical activity, however after conducting analysis
+we may deduce some type of pattern.
+
+Moving on to another to investigate connection between obesity % and
+fruit intake again, classified by age.
+
+<img src="figures/ggplotObsFruitAge-1.png" ></img>
+
+An apparent linear pattern is present between all age groups. Further
+analysis necessary to determine the strength.
+
+Plotting the same graph but for different ethnic demographic.
+
+<img src="figures/ggplotObsFruitRace-1.png" ></img>
+
+Once again, racial classification does not seem to give us any type of
+insight.
 
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
@@ -200,6 +230,10 @@ summary(model_robust)$coefficient
     ## Data_Value18  0.2363781 0.01213918 19.47234
     ## Data_Value47  0.3281886 0.01100872 29.81171
 
+``` r
+detach("package:MASS", unload = TRUE)
+```
+
     ## Warning: 'MASS' namespace cannot be unloaded:
     ##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 
@@ -235,16 +269,16 @@ summary(model_robust)$coefficient
     ## F-statistic: 398.9 on 8 and 3979 DF,  p-value: < 2.2e-16
 
 ``` r
-ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, 
-    color = Age)) + ggtitle("Obesity Rates vs. Physical Activity for Different Age Groups") + 
+ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, 
+    Age != "")) + ggtitle("Obesity Rates vs. Physical Activity for Different Age Groups") + 
     xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
 ```
 
 ![](figures/ggplotObsPhysAge-1.png)<!-- -->
 
 ``` r
-ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
-    color = Age)) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
+ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, 
+    Age != "")) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
     xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
 
@@ -377,16 +411,16 @@ different models should be used for each age group.
     ## F-statistic: 399.5 on 10 and 3977 DF,  p-value: < 2.2e-16
 
 ``` r
-ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, 
-    color = Race.Ethnicity)) + ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + 
+ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Race.Ethnicity)) + 
+    geom_point(data = subset(total, Race.Ethnicity != "")) + ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + 
     xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
 ```
 
 ![](figures/ggplotObsPhysRace-1.png)<!-- -->
 
 ``` r
-ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
-    color = Race.Ethnicity)) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
+ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Race.Ethnicity)) + 
+    geom_point(data = subset(total, Race.Ethnicity != "")) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
     xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
 
