@@ -118,11 +118,35 @@ plot(model)
 library(MASS)
 # Let's try to do robust model to see if maybe that model is more applicable in our case
 model_robust = rlm(Data_Value36 ~ Data_Value18 + Data_Value47, data=total)
-summary(model_robust)$coefficient
+summary(model_robust)$coefficient  # The result is similar to the OLS model.
 ```
 
 ```{r echo = FALSE, message= FALSE}
 detach("package:MASS", unload = TRUE)
+```
+3D plot of the OLS model
+```{r}
+library(plot3D)
+scatter3D(total$Data_Value18, total$Data_Value47, total$Data_Value36, 
+          theta = 45, phi = 0)
+```
+
+Cross validation
+```{r}
+set.seed(123)
+
+nsamp = ceiling(0.75*nrow(total)) # number of samples                             
+training_samps = sample(c(1:nrow(total)),nsamp)   # sampled cases
+
+train_data <- total[training_samps, ]   
+test_data  <- total[-training_samps, ]
+
+cross_val_model<- lm(Data_Value36 ~ Data_Value18 + Data_Value19, data=train_data)
+summary(cross_val_model)
+
+preds <- predict(cross_val_model,test_data)
+error_percent<-100*abs(preds-test_data$Data_Value36)/test_data$Data_Value36
+mean(error_percent) # prediction error is around 20%
 ```
 
 # Try to fit different models
