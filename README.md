@@ -1,9 +1,42 @@
-ObesityModel
+Analysis of CDC Dataset
 ================
 Kaiyan Li, Kirill Gavrilov, Victor Wang
 28/11/2020
 
+# Abstract
+
+The prevalence of obesity has increased in the United States in the past
+decades \[1\]. A wide range of medical complications of obesity, such as
+diabetes, hypertension, heart disease, respiratory disease,
+significantly reduced patients’ quality of life.2 This statistical
+analysis provides time trends for adults over 18 years old are
+classified to have obesity (body mass index (BMI) \> 30) from 2011-2016,
+using data from Center for Disease Control and Prevention (CDC).
+Moreover, the data is inspected with respect to the food intake and
+physical activity levels.
+
 # Introduction
+
+Over the last three decades, mean body mass index (BMI; kg/m2) has
+increased by 0.4 kg/m2 per decade.3 The United States has the highest
+mean BMI among high-income countries, leading to one in four adults
+having a BMI \> 30 kg/m2 based on self-reported height and weight.4 This
+study analyses data from the Center for Disease Control and Prevention
+(CDC) collected over 6 years from 2011-2016 in all states of America.
+Each data point represents a proportion of people that fall under a
+particular demographic. Individuals are classified into age, income,
+gender, education and ethnic categories. Aside from obesity rates, the
+data also includes proportions of people with specific food intake
+habits, as well as various physical activity levels. Our goal is to
+determine the existence of a relationship between obesity rates and
+lifestyle choices of patients. We will be inspecting how obesity rates
+may relate to percent of people that consume fruits and vegetables less
+than one time per day and do not engage in leisure time physical
+activity. Additional analysis will be performed to confirm the
+increasing levels of obesity in the United States and precisely identify
+a state with significant evidence.
+
+# Data Description
 
 Center for Disease Control (CDC) collected data from distinct
 demographic groups throughout 2011 to 2016 in all states of America.
