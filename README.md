@@ -73,6 +73,8 @@ of these classifications. We would like to answer these questions:
 2.  Is there evidence that *obesity rates* in the USA are growing?
 3.  Add more later
 
+<img src="figures/ggplotObsPhysAge.png" ></img>
+
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
 to make it unique. Since we are mainly going to be working with the
@@ -170,7 +172,7 @@ vif(model)  # < 10, no serious collinearity problem
 plot(model)
 ```
 
-![something](figures/OriginalModel-1.png)![something](figures/OriginalModel-2.png)![something](figures/OriginalModel-3.png)![something](figures/OriginalModel-4.png)
+![](figures/OginalModelRes-1.png)<!-- -->![](figures/OginalModelRes-2.png)<!-- -->![](figures/OginalModelRes-3.png)<!-- -->![](figures/OginalModelRes-4.png)<!-- -->
 
 ``` r
 # From the Residuals vs Fitted plot, the residuals are uncorrelated and the
@@ -198,21 +200,12 @@ summary(model_robust)$coefficient
     ## Data_Value18  0.2363781 0.01213918 19.47234
     ## Data_Value47  0.3281886 0.01100872 29.81171
 
-``` r
-detach("package:MASS", unload = TRUE)
-```
-
     ## Warning: 'MASS' namespace cannot be unloaded:
     ##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 
 # Try to fit different models
 
 \[ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i\]
-
-``` r
-model_age <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Age, data = total)
-summary(model_age)
-```
 
     ## 
     ## Call:
@@ -242,26 +235,21 @@ summary(model_age)
     ## F-statistic: 398.9 on 8 and 3979 DF,  p-value: < 2.2e-16
 
 ``` r
-# The result is significantly different for each age group.
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, 
-    color = Age))
+    color = Age)) + ggtitle("Obesity Rates vs. Physical Activity for Different Age Groups") + 
+    xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
 ```
 
-![](figures/unnamed-chunk-3-1.png)<!-- -->
+![](figures/ggplotObsPhysAge-1.png)<!-- -->
 
 ``` r
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
-    color = Age))
+    color = Age)) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
+    xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
 
-![](figures/unnamed-chunk-3-2.png)<!-- -->
-
-``` r
-# The plot indicates different models should be used for each age group.
-
-model_gender <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Gender, data = total)
-summary(model_gender)
-```
+![](figures/ggplotObsFruitAge-1.png)<!-- --> \# The plot indicates
+different models should be used for each age group.
 
     ## 
     ## Call:
@@ -285,11 +273,6 @@ summary(model_gender)
     ## Residual standard error: 5.728 on 3983 degrees of freedom
     ## Multiple R-squared:  0.2976, Adjusted R-squared:  0.2969 
     ## F-statistic: 421.9 on 4 and 3983 DF,  p-value: < 2.2e-16
-
-``` r
-model_income <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Income, data = total)
-summary(model_income)
-```
 
     ## 
     ## Call:
@@ -318,11 +301,6 @@ summary(model_income)
     ## Residual standard error: 5.596 on 3978 degrees of freedom
     ## Multiple R-squared:  0.3306, Adjusted R-squared:  0.3291 
     ## F-statistic: 218.3 on 9 and 3978 DF,  p-value: < 2.2e-16
-
-``` r
-model_education <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Education, data = total)
-summary(model_education)
-```
 
     ## 
     ## Call:
@@ -356,11 +334,6 @@ summary(model_education)
     ## Residual standard error: 5.687 on 3981 degrees of freedom
     ## Multiple R-squared:  0.308,  Adjusted R-squared:  0.307 
     ## F-statistic: 295.4 on 6 and 3981 DF,  p-value: < 2.2e-16
-
-``` r
-model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, data = total)
-summary(model_race)
-```
 
     ## 
     ## Call:
@@ -405,17 +378,19 @@ summary(model_race)
 
 ``` r
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value47, y = Data_Value36, 
-    color = Race.Ethnicity))
+    color = Race.Ethnicity)) + ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + 
+    xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
 ```
 
-![](figures/unnamed-chunk-3-3.png)<!-- -->
+![](figures/ggplotObsPhysRace-1.png)<!-- -->
 
 ``` r
 ggplot(data = total) + geom_point(mapping = aes(x = Data_Value18, y = Data_Value36, 
-    color = Race.Ethnicity))
+    color = Race.Ethnicity)) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
+    xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
 
-![](figures/unnamed-chunk-3-4.png)<!-- -->
+![](figures/ggplotObsFruitRace-1.png)<!-- -->
 
 ## Analysis of total obesity rates for every state
 
@@ -427,7 +402,7 @@ final obesity percentage for each state in a particular year.
 \[ obesity =\beta_0 + \beta_1year + \epsilon\]
 
 ``` r
-Q36 = Q36 %>% select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, 
+Q36 = Q36 %>% dplyr::select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, 
     Total) %>% arrange(Location)
 Q36[Q36 == ""] = NA
 Q36 = Q36 %>% drop_na()
@@ -464,7 +439,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-5-1.png" width="50%" /><img src="figures/unnamed-chunk-5-2.png" width="50%" />
+<img src="figures/unnamed-chunk-7-1.png" width="50%" /><img src="figures/unnamed-chunk-7-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -494,7 +469,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](figures/unnamed-chunk-6-1.png)<!-- --> Particular image represents
+![](figures/unnamed-chunk-8-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -540,7 +515,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-8-1.png" width="50%" /><img src="figures/unnamed-chunk-8-2.png" width="50%" />
+<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape
