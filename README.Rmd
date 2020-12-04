@@ -163,7 +163,7 @@ Crucial part of model validation is residual assessment. Residuals for particula
 ```{r OginalModelRes, fig.show = "hold", out.width = "50%", echo = FALSE}
 par(mar = c(4, 4, 0.1, 0.1))
 plot(model, which = c(1,2))
-plot(model, which = c(3,5))
+plot(model, which = c(3,4))
 ```
 
 As seen from the plots above, residuals are uncorrelated and the constant variance assumption is satisfied, although residuals do tend to deviate from the straight line in the Normal Q-Q plot. Since there is no apparent pattern in the residuals, data transformation is not relevant. Fitting a robust linear regression model is a more applicable solution in this case with Huber's t robust criterion function. 
@@ -176,11 +176,11 @@ summary(model_robust)$coefficient
 The resulting coefficient values are highly similar to those in the ordinary least squares regression model. Therefore, we will continue our analysis with the OLS equation.
 
 ```{r message= FALSE, echo = FALSE}
-detach("package:MASS", unload = TRUE)
+detach("package:MASS")
 ```
 
-Cross validation was carried out to further assess the performance of the model. Even though the R-squared value of the current model is 0.2965, mean prediction error turned out to be 20.86% for the percent of adults who have obesity. 
-```{r echo = FALSE}
+Cross validation was carried out to further assess the performance of the model. Even though the R-squared value of the current model is 0.2975, mean prediction error turned out to be 20.86% for the percent of adults who have obesity. 
+```{r echo = FALSE, eval = FALSE}
 set.seed(123)
 
 nsamp = ceiling(0.75*nrow(total)) # number of samples                             
@@ -196,15 +196,14 @@ preds <- predict(cross_val_model,test_data)
 error_percent<-100*abs(preds-test_data$Data_Value36)/test_data$Data_Value36
 mean(error_percent) # prediction error is around 20%
 ```
+Further altering current regression model $obesity =\beta_0 + \beta_1fruit + \beta_2exercise$ to be sensetive to a particular demographic, such as age or ethnicity. The equation now becomes: $ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i$
 
-# Try to fit different models
-$$ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i$$
 ```{r echo = FALSE}
 model_age <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Age, data=total)
 summary(model_age)
 # The result is significantly different for each age group.
 ```
-```{r ggplotObsPhysAge}
+```{r ggplotObsPhysAge, echo = FALSE}
 ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, Age != "")) + 
   ggtitle ("Obesity Rates vs. Physical Activity for Different Age Groups") + xlab("% of adults with no physical activity") + 
   ylab("% of adults who have obesity ")
@@ -230,12 +229,12 @@ model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, da
 summary(model_race)
 ```
 
-```{r ggplotObsPhysRace}
+```{r ggplotObsPhysRace, echo = FALSE}
 ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Race.Ethnicity)) + geom_point(data = subset(total, Race.Ethnicity != "")) + 
   ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + xlab("% of adults with no physical activity") + 
   ylab("% of adults who have obesity ")
 ```
-```{r ggplotObsFruitRace}
+```{r ggplotObsFruitRace, echo = FALSE}
 ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Race.Ethnicity)) + geom_point(data = subset(total, Race.Ethnicity != "")) + 
   ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```

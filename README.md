@@ -274,39 +274,15 @@ The resulting coefficient values are highly similar to those in the
 ordinary least squares regression model. Therefore, we will continue our
 analysis with the OLS equation.
 
-    ## Warning: 'MASS' namespace cannot be unloaded:
-    ##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
-
 Cross validation was carried out to further assess the performance of
 the model. Even though the R-squared value of the current model is
-0.2965, mean prediction error turned out to be 20.86% for the percent of
+0.2975, mean prediction error turned out to be 20.86% for the percent of
 adults who have obesity.
 
-    ## 
-    ## Call:
-    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value19, data = train_data)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -32.054  -2.445   0.686   3.597  35.480 
-    ## 
-    ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  13.24221    0.66977  19.771  < 2e-16 ***
-    ## Data_Value18  0.27875    0.02164  12.879  < 2e-16 ***
-    ## Data_Value19  0.18192    0.02234   8.143  5.6e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 6.208 on 2988 degrees of freedom
-    ## Multiple R-squared:  0.1777, Adjusted R-squared:  0.1772 
-    ## F-statistic: 322.9 on 2 and 2988 DF,  p-value: < 2.2e-16
-
-    ## [1] 20.86382
-
-# Try to fit different models
-
-\[ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i\]
+Further altering current regression model
+\(obesity =\beta_0 + \beta_1fruit + \beta_2exercise\) to be sensetive to
+a particular demographic, such as age or ethnicity. The equation now
+becomes: $ obesity =\_0 + \_1fruit + \_2exercise + \_iIndicator\_i$
 
     ## 
     ## Call:
@@ -334,12 +310,6 @@ adults who have obesity.
     ## Residual standard error: 5.094 on 3979 degrees of freedom
     ## Multiple R-squared:  0.4451, Adjusted R-squared:  0.444 
     ## F-statistic: 398.9 on 8 and 3979 DF,  p-value: < 2.2e-16
-
-``` r
-ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, 
-    Age != "")) + ggtitle("Obesity Rates vs. Physical Activity for Different Age Groups") + 
-    xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
-```
 
 ![](figures/ggplotObsPhysAge-1.png)<!-- -->
 
@@ -477,20 +447,7 @@ different models should be used for each age group.
     ## Multiple R-squared:  0.5011, Adjusted R-squared:  0.4999 
     ## F-statistic: 399.5 on 10 and 3977 DF,  p-value: < 2.2e-16
 
-``` r
-ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Race.Ethnicity)) + 
-    geom_point(data = subset(total, Race.Ethnicity != "")) + ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + 
-    xlab("% of adults with no physical activity") + ylab("% of adults who have obesity ")
-```
-
 ![](figures/ggplotObsPhysRace-1.png)<!-- -->
-
-``` r
-ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Race.Ethnicity)) + 
-    geom_point(data = subset(total, Race.Ethnicity != "")) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
-    xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
-```
-
 ![](figures/ggplotObsFruitRace-1.png)<!-- -->
 
 ## Analysis of total obesity rates for every state
