@@ -105,6 +105,12 @@ Plotting the same graph but for different ethnic demographic.
 Once again, racial classification does not seem to give us any type of
 insight.
 
+To help us further visualize mandatory data, a 3D plot of obesity
+percentages, fruit consumption and physical activity levels were
+plotted.
+
+<img src="figures/AnimatedGraph.gif" ></img>
+
 -----
 
 To answer the second question, visualization of obesity rates per year
@@ -244,32 +250,19 @@ multicollinearity is not an issue.
 Crucial part of model validation is residual assessment. Residuals for
 particular model are:
 
-``` r
-par(mar = c(4, 4, 0.1, 0.1))
-plot(model, which = c(1, 2, 3, 4))
-```
-
 <img src="figures/OginalModelRes-1.png" width="50%" /><img src="figures/OginalModelRes-2.png" width="50%" /><img src="figures/OginalModelRes-3.png" width="50%" /><img src="figures/OginalModelRes-4.png" width="50%" />
 
+As seen from the plots above, residuals are uncorrelated and the
+constant variance assumption is satisfied, although residuals do tend to
+deviate from the straight line in the Normal Q-Q plot. Since there is no
+apparent pattern in the residuals, data transformation is not relevant.
+Fitting a robust linear regression model is a more applicable solution
+in this case with Huber’s t robust criterion function.
+
 ``` r
-# From the Residuals vs Fitted plot, the residuals are uncorrelated and the
-# constant variance assumption is satisfied.  From the Normal Q-Q plot, the
-# residuals are not normally distributed.
 library(MASS)
-```
-
-    ## 
-    ## Attaching package: 'MASS'
-
-    ## The following object is masked from 'package:dplyr':
-    ## 
-    ##     select
-
-``` r
-# Let's try to do robust model to see if maybe that model is more applicable in
-# our case
 model_robust = rlm(Data_Value36 ~ Data_Value18 + Data_Value47, data = total)
-summary(model_robust)$coefficient  # The result is similar to the OLS model
+summary(model_robust)$coefficient
 ```
 
     ##                   Value Std. Error  t value
@@ -277,47 +270,17 @@ summary(model_robust)$coefficient  # The result is similar to the OLS model
     ## Data_Value18  0.2363781 0.01213918 19.47234
     ## Data_Value47  0.3281886 0.01100872 29.81171
 
-``` r
-detach("package:MASS", unload = TRUE)
-```
+The resulting coefficient values are highly similar to those in the
+ordinary least squares regression model. Therefore, we will continue our
+analysis with the OLS equation.
 
     ## Warning: 'MASS' namespace cannot be unloaded:
     ##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
 
-3D plot
-
-``` r
-# Test if the points form a plane in a 3D space.
-library(plot3D)
-library(rgl)
-scatter3D(total$Data_Value18, total$Data_Value47, total$Data_Value36, theta = 45, 
-    phi = 0, xlab = "Fruit", ylab = "Physical Activity", zlab = "Obesity")
-rgb.palette <- colorRampPalette(c("green", "red", "black"), space = "rgb")
-par3d(windowRect = c(20, 30, 600, 600))
-plot3d(total$Data_Value18, total$Data_Value47, total$Data_Value36, xlab = "Fruit", 
-    ylab = "Physical Activity", zlab = "Obesity", theta = 45, phi = 0, col = rgb.palette(100)[as.numeric(cut(total$Data_Value36, 
-        breaks = 50))])
-play3d(spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10)
-movie3d(movie = "AnimatedGraph", spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10, 
-    dir = "~/Desktop", type = "gif", clean = TRUE)
-```
-
-<img src="figures/AnimatedGraph.gif" ></img>
-
-Cross validation
-
-``` r
-set.seed(123)
-
-nsamp = ceiling(0.75 * nrow(total))  # number of samples                             
-training_samps = sample(c(1:nrow(total)), nsamp)  # sampled cases
-
-train_data <- total[training_samps, ]
-test_data <- total[-training_samps, ]
-
-cross_val_model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19, data = train_data)
-summary(cross_val_model)
-```
+Cross validation was carried out to further assess the performance of
+the model. Even though the R-squared value of the current model is
+0.2965, mean prediction error turned out to be 20.86% for the percent of
+adults who have obesity.
 
     ## 
     ## Call:
@@ -338,12 +301,6 @@ summary(cross_val_model)
     ## Residual standard error: 6.208 on 2988 degrees of freedom
     ## Multiple R-squared:  0.1777, Adjusted R-squared:  0.1772 
     ## F-statistic: 322.9 on 2 and 2988 DF,  p-value: < 2.2e-16
-
-``` r
-preds <- predict(cross_val_model, test_data)
-error_percent <- 100 * abs(preds - test_data$Data_Value36)/test_data$Data_Value36
-mean(error_percent)  # prediction error is around 20%
-```
 
     ## [1] 20.86382
 
@@ -590,7 +547,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
+<img src="figures/unnamed-chunk-9-1.png" width="50%" /><img src="figures/unnamed-chunk-9-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -620,7 +577,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](figures/unnamed-chunk-11-1.png)<!-- --> Particular image represents
+![](figures/unnamed-chunk-10-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -666,9 +623,11 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-13-1.png" width="50%" /><img src="figures/unnamed-chunk-13-2.png" width="50%" />
+<img src="figures/unnamed-chunk-12-1.png" width="50%" /><img src="figures/unnamed-chunk-12-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape
 with slight deviation from the Normal line and do not violate the
 independence assumption.
+
+3D plot
