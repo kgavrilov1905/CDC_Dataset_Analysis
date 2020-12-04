@@ -266,11 +266,20 @@ detach("package:MASS", unload = TRUE)
 ``` r
 # Test if the points form a plane in a 3D space.
 library(plot3D)
+library(rgl)
 scatter3D(total$Data_Value18, total$Data_Value47, total$Data_Value36, theta = 45, 
     phi = 0, xlab = "Fruit", ylab = "Physical Activity", zlab = "Obesity")
+rgb.palette <- colorRampPalette(c("green", "red", "black"), space = "rgb")
+par3d(windowRect = c(20, 30, 600, 600))
+plot3d(total$Data_Value18, total$Data_Value47, total$Data_Value36, xlab = "Fruit", 
+    ylab = "Physical Activity", zlab = "Obesity", theta = 45, phi = 0, col = rgb.palette(100)[as.numeric(cut(total$Data_Value36, 
+        breaks = 50))])
+play3d(spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10)
+movie3d(movie = "AnimatedGraph", spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10, 
+    dir = "~/Desktop", type = "gif", clean = TRUE)
 ```
 
-![](figures/unnamed-chunk-4-1.png)<!-- -->
+<img src="figures/AnimatedGraph.gif" ></img>
 
 Cross validation
 
