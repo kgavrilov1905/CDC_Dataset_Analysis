@@ -75,7 +75,7 @@ It is not evident which states are showing a positive relationship and whether o
 
 # Methods
 
-This analysis was completed using statistical software RStudio. Package "tidyverse" was used for visualization and dataframe manipulation. Package "farway" provided function for calculation of variance inflation factor, which was used to assess multicollinearity. Robust regression model was built using "MASS" package. An ordinary least squares regression model, analysis of variance and other basic function were performed with pre-loaded default packages like "base" and "stats". Documentation of the analysis was written in R environment using Markdown language.
+This analysis was completed using statistical software RStudio. Package "tidyverse" was used for visualization and dataframe manipulation. Package "farway" provided function for calculation of variance inflation factor, which was used to assess multicollinearity. Robust regression model was built using "MASS" package. 3D plot was created using "plot3D" package, rendered with "rgl" and converted into gif format with "magick" package. An ordinary least squares regression model, analysis of variance and other basic function were performed with pre-loaded default packages like "base" and "stats". Documentation of the analysis was written in R environment using Markdown language.
 
 # Results
 
@@ -133,17 +133,26 @@ total <-inner_join(total,Q36,by=c("Year","Location","Total", "Age.years.", "Educ
 total <-inner_join(total,Q47,by=c("Year","Location","Total", "Age.years.", "Education", "Gender", "Income", "Race.Ethnicity","LocationID","StratificationCategory1","Stratification1"))
 total <- total%>% select(-Class18,-Class19,-Class36,-Class47, -Question18,-Question19,-Question36,-Question47)%>%drop_na()%>%rename(Age=Age.years.)
 ```
+Other tedious dataframe transformations were omitted from the report and further information is available in the appendix.
 
-We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity 
+We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity. $obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise$
 ```{r OriginalModel}
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
 summary(model)
+```
+Individual p-values are showing significant evidence towards being important except for percent of people who consume vegetables less than once daily (Data_Value19). Backwards elimination technique is applicable in this case to reduce the model and hopefully increase the R-squared.
+
+```{r OriginalModelBack}
 #Using Backward Elimination method, remove the variable Data_Value19
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value47, data=total)
 summary(model)
-#Test if collinearity problem exists
-vif(model)  # < 10, no serious collinearity problem
 ```
+All variables still remain significant in the model and R-squared is a bit higher as well. Updated linear regression model now becomes: $obesity =\beta_0 + \beta_1fruit + \beta_2vegetable$. Following, variance inflation factor is calculated to ensure multicollinearity is not present in the equation.
+
+```{r ModelColl}
+vif(model)
+```
+Since both values are notably below 10, we can safely say that multicollinearity is not an issue. 
 
 ```{r OginalModelRes}
 plot(model)

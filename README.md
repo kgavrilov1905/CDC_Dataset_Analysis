@@ -121,11 +121,12 @@ This analysis was completed using statistical software RStudio. Package
 “tidyverse” was used for visualization and dataframe manipulation.
 Package “farway” provided function for calculation of variance inflation
 factor, which was used to assess multicollinearity. Robust regression
-model was built using “MASS” package. An ordinary least squares
-regression model, analysis of variance and other basic function were
-performed with pre-loaded default packages like “base” and “stats”.
-Documentation of the analysis was written in R environment using
-Markdown language.
+model was built using “MASS” package. 3D plot was created using “plot3D”
+package, rendered with “rgl” and converted into gif format with “magick”
+package. An ordinary least squares regression model, analysis of
+variance and other basic function were performed with pre-loaded default
+packages like “base” and “stats”. Documentation of the analysis was
+written in R environment using Markdown language.
 
 # Results
 
@@ -157,9 +158,13 @@ cdc_adjusted[28, 5] = 30.2
 cdc_adjusted[28, 6] = 64
 ```
 
+Other tedious dataframe transformations were omitted from the report and
+further information is available in the appendix.
+
 We now want to analyze the ordinary least squares model that relates
 obesity rates to people who report eating fruit and vegetable less than
-1 time a day and engage in no physical activity
+1 time a day and engage in no physical activity.
+\(obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise\)
 
 ``` r
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data = total)
@@ -188,6 +193,12 @@ summary(model)
     ## Multiple R-squared:  0.2975, Adjusted R-squared:  0.297 
     ## F-statistic: 562.5 on 3 and 3984 DF,  p-value: < 2.2e-16
 
+Individual p-values are showing significant evidence towards being
+important except for percent of people who consume vegetables less than
+once daily (Data\_Value19). Backwards elimination technique is
+applicable in this case to reduce the model and hopefully increase the
+R-squared.
+
 ``` r
 # Using Backward Elimination method, remove the variable Data_Value19
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value47, data = total)
@@ -214,13 +225,21 @@ summary(model)
     ## Multiple R-squared:  0.2975, Adjusted R-squared:  0.2971 
     ## F-statistic: 843.8 on 2 and 3985 DF,  p-value: < 2.2e-16
 
+All variables still remain significant in the model and R-squared is a
+bit higher as well. Updated linear regression model now becomes:
+\(obesity =\beta_0 + \beta_1fruit + \beta_2vegetable\). Following,
+variance inflation factor is calculated to ensure multicollinearity is
+not present in the equation.
+
 ``` r
-# Test if collinearity problem exists
-vif(model)  # < 10, no serious collinearity problem
+vif(model)
 ```
 
     ## Data_Value18 Data_Value47 
     ##     1.273901     1.273901
+
+Since both values are notably below 10, we can safely say that
+multicollinearity is not an issue.
 
 ``` r
 plot(model)
