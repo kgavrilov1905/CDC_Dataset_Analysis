@@ -147,15 +147,21 @@ Individual p-values are showing significant evidence towards being important exc
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value47, data=total)
 summary(model)
 ```
-All variables still remain significant in the model and R-squared is a bit higher as well. Updated linear regression model now becomes: $obesity =\beta_0 + \beta_1fruit + \beta_2vegetable$. Following, variance inflation factor is calculated to ensure multicollinearity is not present in the equation.
+All variables still remain significant in the model and R-squared is a bit higher as well. Updated linear regression model now becomes: $$obesity =\beta_0 + \beta_1fruit + \beta_2vegetable$$. Following, variance inflation factor is calculated to ensure multicollinearity is not present in the equation.
 
 ```{r ModelColl}
 vif(model)
 ```
-Since both values are notably below 10, we can safely say that multicollinearity is not an issue. 
+Since both values are notably below 10, we can safely say that multicollinearity is not an issue.
 
-```{r OginalModelRes}
-plot(model)
+Crucial part of model validation is residual assessment. Residuals for particular model are:
+
+```{r OginalModelRes, fig.show = "hold", out.width = "50%"}
+par(mar = c(4, 4, 0.1, 0.1))
+plot(model, which = c(1,2,3,4))
+```
+
+```{r}
 # From the Residuals vs Fitted plot, the residuals are uncorrelated and the constant variance assumption is satisfied.
 # From the Normal Q-Q plot, the residuals are not normally distributed.
 library(MASS)

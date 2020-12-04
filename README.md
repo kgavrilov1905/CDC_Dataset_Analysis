@@ -227,7 +227,7 @@ summary(model)
 
 All variables still remain significant in the model and R-squared is a
 bit higher as well. Updated linear regression model now becomes:
-\(obesity =\beta_0 + \beta_1fruit + \beta_2vegetable\). Following,
+\[obesity =\beta_0 + \beta_1fruit + \beta_2vegetable\]. Following,
 variance inflation factor is calculated to ensure multicollinearity is
 not present in the equation.
 
@@ -241,11 +241,15 @@ vif(model)
 Since both values are notably below 10, we can safely say that
 multicollinearity is not an issue.
 
+Crucial part of model validation is residual assessment. Residuals for
+particular model are:
+
 ``` r
-plot(model)
+par(mar = c(4, 4, 0.1, 0.1))
+plot(model, which = c(1, 2, 3, 4))
 ```
 
-![](figures/OginalModelRes-1.png)<!-- -->![](figures/OginalModelRes-2.png)<!-- -->![](figures/OginalModelRes-3.png)<!-- -->![](figures/OginalModelRes-4.png)<!-- -->
+<img src="figures/OginalModelRes-1.png" width="50%" /><img src="figures/OginalModelRes-2.png" width="50%" /><img src="figures/OginalModelRes-3.png" width="50%" /><img src="figures/OginalModelRes-4.png" width="50%" />
 
 ``` r
 # From the Residuals vs Fitted plot, the residuals are uncorrelated and the
@@ -586,7 +590,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-9-1.png" width="50%" /><img src="figures/unnamed-chunk-9-2.png" width="50%" />
+<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -616,7 +620,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](figures/unnamed-chunk-10-1.png)<!-- --> Particular image represents
+![](figures/unnamed-chunk-11-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -662,7 +666,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-12-1.png" width="50%" /><img src="figures/unnamed-chunk-12-2.png" width="50%" />
+<img src="figures/unnamed-chunk-13-1.png" width="50%" /><img src="figures/unnamed-chunk-13-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape
