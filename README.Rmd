@@ -73,7 +73,11 @@ To answer the second question, visualization of obesity rates per year is the mo
 
 It is not evident which states are showing a positive relationship and whether or not it is strong. 
 
-#Methods
+# Methods
+
+This analysis was completed using statistical software RStudio. Package "tidyverse" was used for visualization and dataframe manipulation. Package "farway" provided function for calculation of variance inflation factor, which was used to assess multicollinearity. Robust regression model was built using "MASS" package. An ordinary least squares regression model, analysis of variance and other basic function were performed with pre-loaded default packages like "base" and "stats". Documentation of the analysis was written in R environment using Markdown language.
+
+# Results
 
 Firstly we need to analyze the original dataset, remove all the unnecessary variables and observations, add a new point to the dataset to make it unique. Since we are mainly going to be working with the obesity percentage data points, we will fill in the missing value for obesity % in Alabama in 2011, specifically for "Other" ethnicity. Particular value was chosen by looking at near by states at that year for that demographic. 
 ```{r message = FALSE}

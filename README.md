@@ -115,7 +115,19 @@ is the most appropriate way to understand what data we are dealing with.
 It is not evident which states are showing a positive relationship and
 whether or not it is strong.
 
-\#Methods
+# Methods
+
+This analysis was completed using statistical software RStudio. Package
+“tidyverse” was used for visualization and dataframe manipulation.
+Package “farway” provided function for calculation of variance inflation
+factor, which was used to assess multicollinearity. Robust regression
+model was built using “MASS” package. An ordinary least squares
+regression model, analysis of variance and other basic function were
+performed with pre-loaded default packages like “base” and “stats”.
+Documentation of the analysis was written in R environment using
+Markdown language.
+
+# Results
 
 Firstly we need to analyze the original dataset, remove all the
 unnecessary variables and observations, add a new point to the dataset
@@ -234,7 +246,7 @@ library(MASS)
 # Let's try to do robust model to see if maybe that model is more applicable in
 # our case
 model_robust = rlm(Data_Value36 ~ Data_Value18 + Data_Value47, data = total)
-summary(model_robust)$coefficient
+summary(model_robust)$coefficient  # The result is similar to the OLS model
 ```
 
     ##                   Value Std. Error  t value
@@ -248,6 +260,60 @@ detach("package:MASS", unload = TRUE)
 
     ## Warning: 'MASS' namespace cannot be unloaded:
     ##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+
+3D plot
+
+``` r
+# Test if the points form a plane in a 3D space.
+library(plot3D)
+scatter3D(total$Data_Value18, total$Data_Value47, total$Data_Value36, theta = 45, 
+    phi = 0, xlab = "Fruit", ylab = "Physical Activity", zlab = "Obesity")
+```
+
+![](figures/unnamed-chunk-4-1.png)<!-- -->
+
+Cross validation
+
+``` r
+set.seed(123)
+
+nsamp = ceiling(0.75 * nrow(total))  # number of samples                             
+training_samps = sample(c(1:nrow(total)), nsamp)  # sampled cases
+
+train_data <- total[training_samps, ]
+test_data <- total[-training_samps, ]
+
+cross_val_model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19, data = train_data)
+summary(cross_val_model)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value19, data = train_data)
+    ## 
+    ## Residuals:
+    ##     Min      1Q  Median      3Q     Max 
+    ## -32.054  -2.445   0.686   3.597  35.480 
+    ## 
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  13.24221    0.66977  19.771  < 2e-16 ***
+    ## Data_Value18  0.27875    0.02164  12.879  < 2e-16 ***
+    ## Data_Value19  0.18192    0.02234   8.143  5.6e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 6.208 on 2988 degrees of freedom
+    ## Multiple R-squared:  0.1777, Adjusted R-squared:  0.1772 
+    ## F-statistic: 322.9 on 2 and 2988 DF,  p-value: < 2.2e-16
+
+``` r
+preds <- predict(cross_val_model, test_data)
+error_percent <- 100 * abs(preds - test_data$Data_Value36)/test_data$Data_Value36
+mean(error_percent)  # prediction error is around 20%
+```
+
+    ## [1] 20.86382
 
 # Try to fit different models
 
@@ -492,7 +558,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-7-1.png" width="50%" /><img src="figures/unnamed-chunk-7-2.png" width="50%" />
+<img src="figures/unnamed-chunk-9-1.png" width="50%" /><img src="figures/unnamed-chunk-9-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -522,7 +588,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](figures/unnamed-chunk-8-1.png)<!-- --> Particular image represents
+![](figures/unnamed-chunk-10-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -568,7 +634,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
+<img src="figures/unnamed-chunk-12-1.png" width="50%" /><img src="figures/unnamed-chunk-12-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape
