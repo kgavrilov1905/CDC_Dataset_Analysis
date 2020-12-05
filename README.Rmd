@@ -44,6 +44,7 @@ In this study we would like to answer the following questions:
 To get a sense of what to anticipate for the upcoming analysis, we will plot classifications of interest versus obesity rates. Age category is crucial to investigate, therefore we will start by plotting this obesity rates versus physical activity for each age demographic.
 
 <img src="figures/ggplotObsPhysAge-1.png" ></img>
+
 Figure 1
 
 There's a fairly evident pattern seen form the plot, however needs further analysis on the strength.
@@ -51,6 +52,7 @@ There's a fairly evident pattern seen form the plot, however needs further analy
 Now plotting the same graph but for different ethnic demographic.
 
 <img src="figures/ggplotObsPhysRace-1.png" ></img>
+
 Figure 2
 
 This plot does not give us much insight on a relationship between obesity levels and physical activity, however after conducting analysis we may deduce some type of pattern. 
@@ -213,7 +215,9 @@ Applying the same concept but now indicator variable will be ethnicity.
 
 ```{r echo = FALSE}
 model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, data=total)
-summary(model_race)
+temp = as.data.frame(summary(model_race)$coef[,4])
+colnames(temp) = c("Pr(>|t|)")
+temp
 ```
 Even though the related Figure 2, does not suggest strong visual evidence that different racial demographics have strong linear correlation, the hypothesis test indicates otherwise for most variables. Most likely that is due to addition of the fruit consumption variable in the model, where the graph does not include it. 
 

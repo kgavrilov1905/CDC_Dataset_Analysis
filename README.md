@@ -77,14 +77,18 @@ plot classifications of interest versus obesity rates. Age category is
 crucial to investigate, therefore we will start by plotting this obesity
 rates versus physical activity for each age demographic.
 
-<img src="figures/ggplotObsPhysAge-1.png" ></img> Figure 1
+<img src="figures/ggplotObsPhysAge-1.png" ></img>
+
+Figure 1
 
 There’s a fairly evident pattern seen form the plot, however needs
 further analysis on the strength.
 
 Now plotting the same graph but for different ethnic demographic.
 
-<img src="figures/ggplotObsPhysRace-1.png" ></img> Figure 2
+<img src="figures/ggplotObsPhysRace-1.png" ></img>
+
+Figure 2
 
 This plot does not give us much insight on a relationship between
 obesity levels and physical activity, however after conducting analysis
@@ -320,46 +324,18 @@ solidifies our findings.
 
 Applying the same concept but now indicator variable will be ethnicity.
 
-    ## 
-    ## Call:
-    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, 
-    ##     data = total)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -28.324  -2.571   0.409   3.015  33.900 
-    ## 
-    ## Coefficients:
-    ##                                              Estimate Std. Error t value
-    ## (Intercept)                                  13.03003    0.46341  28.118
-    ## Data_Value18                                  0.15927    0.01260  12.637
-    ## Data_Value47                                  0.34645    0.01144  30.279
-    ## Race.Ethnicity2 or more races                 2.51604    0.41681   6.036
-    ## Race.EthnicityAmerican Indian/Alaska Native   5.24824    0.49213  10.664
-    ## Race.EthnicityAsian                         -17.13510    0.50029 -34.250
-    ## Race.EthnicityHawaiian/Pacific Islander       9.32529    1.61277   5.782
-    ## Race.EthnicityHispanic                        0.28636    0.40241   0.712
-    ## Race.EthnicityNon-Hispanic Black              6.61236    0.44386  14.898
-    ## Race.EthnicityNon-Hispanic White             -0.63334    0.39592  -1.600
-    ## Race.EthnicityOther                          -1.86872    0.69422  -2.692
-    ##                                             Pr(>|t|)    
-    ## (Intercept)                                  < 2e-16 ***
-    ## Data_Value18                                 < 2e-16 ***
-    ## Data_Value47                                 < 2e-16 ***
-    ## Race.Ethnicity2 or more races               1.72e-09 ***
-    ## Race.EthnicityAmerican Indian/Alaska Native  < 2e-16 ***
-    ## Race.EthnicityAsian                          < 2e-16 ***
-    ## Race.EthnicityHawaiian/Pacific Islander     7.94e-09 ***
-    ## Race.EthnicityHispanic                       0.47674    
-    ## Race.EthnicityNon-Hispanic Black             < 2e-16 ***
-    ## Race.EthnicityNon-Hispanic White             0.10975    
-    ## Race.EthnicityOther                          0.00714 ** 
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 4.831 on 3977 degrees of freedom
-    ## Multiple R-squared:  0.5011, Adjusted R-squared:  0.4999 
-    ## F-statistic: 399.5 on 10 and 3977 DF,  p-value: < 2.2e-16
+    ##                                                  Pr(>|t|)
+    ## (Intercept)                                 8.068263e-159
+    ## Data_Value18                                 6.440225e-36
+    ## Data_Value47                                2.083723e-181
+    ## Race.Ethnicity2 or more races                1.720172e-09
+    ## Race.EthnicityAmerican Indian/Alaska Native  3.366855e-26
+    ## Race.EthnicityAsian                         1.577046e-225
+    ## Race.EthnicityHawaiian/Pacific Islander      7.941426e-09
+    ## Race.EthnicityHispanic                       4.767428e-01
+    ## Race.EthnicityNon-Hispanic Black             6.957030e-49
+    ## Race.EthnicityNon-Hispanic White             1.097539e-01
+    ## Race.EthnicityOther                          7.135951e-03
 
 Even though the related Figure 2, does not suggest strong visual
 evidence that different racial demographics have strong linear
