@@ -183,7 +183,7 @@ further information is available in the appendix.
 
 We now want to analyze the ordinary least squares model that relates
 obesity rates to people who report eating fruit and vegetable less than
-1 time a day and engage in no physical activity. ***obesity =
+1 time a day and engage in no physical activity ***obesity =
 β<sub>0</sub> + β<sub>1</sub>fruit + β<sub>2</sub>vegetable +
 β<sub>3</sub>exercise***
 

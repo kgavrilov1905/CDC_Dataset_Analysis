@@ -154,7 +154,7 @@ total <- total%>% select(-Class18,-Class19,-Class36,-Class47, -Question18,-Quest
 Other tedious dataframe transformations were omitted from the report and further information is available in the appendix.
 
 ## Analysis of obesity rates, fruit/vegetable intake and physical activity
-We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity. ***obesity = β<sub>0</sub> + β<sub>1</sub>fruit + β<sub>2</sub>vegetable + β<sub>3</sub>exercise***
+We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity ***obesity = β<sub>0</sub> + β<sub>1</sub>fruit + β<sub>2</sub>vegetable + β<sub>3</sub>exercise***
 ```{r OriginalModel}
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
 summary(model)
