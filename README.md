@@ -6,8 +6,8 @@ Kirill Gavrilov, Kaiyan Li, Victor Wang
 # Abstract
 
 The prevalence of obesity has increased in the United States in the past
-\(decades^1\). A wide range of medical complications of obesity, such as
-diabetes, hypertension, heart disease, respiratory disease,
+decades<sup>1</sup>. A wide range of medical complications of obesity,
+such as diabetes, hypertension, heart disease, respiratory disease,
 significantly reduced patients’ quality of \(life^2\). This statistical
 analysis provides time trends for adults over 18 years old are
 classified to have obesity (body mass index (BMI) \> 30) from 2011-2016,
@@ -184,7 +184,7 @@ further information is available in the appendix.
 We now want to analyze the ordinary least squares model that relates
 obesity rates to people who report eating fruit and vegetable less than
 1 time a day and engage in no physical activity.
-\(obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise\)
+\[obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise\]
 
 ``` r
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data = total)
@@ -294,10 +294,10 @@ the model. Even though the R-squared value of the current model is
 adults who have obesity.
 
 Further altering current regression model
-\(obesity =\beta_0 + \beta_1fruit + \beta_2exercise\) to be sensetive to
+\[obesity =\beta_0 + \beta_1fruit + \beta_2exercise\] to be sensetive to
 a particular demographic, such as age, ethnicity, gender, income or
-education. The equation now becomes: $ obesity =\_0 + \_1fruit +
-\_2exercise + \_iIndicator\_i$
+education. The equation now becomes:
+\[ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i\]
 
 Results of the first instance where the indicator variable is Age:
 
