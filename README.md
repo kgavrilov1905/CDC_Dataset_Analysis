@@ -1,7 +1,7 @@
 Analysis of CDC Dataset
 ================
-Kaiyan Li, Kirill Gavrilov, Victor Wang
-28/11/2020
+Kirill Gavrilov, Kaiyan Li, Victor Wang
+04/12/2020
 
 # Abstract
 
@@ -77,14 +77,14 @@ plot classifications of interest versus obesity rates. Age category is
 crucial to investigate, therefore we will start by plotting this obesity
 rates versus physical activity for each age demographic.
 
-<img src="figures/ggplotObsPhysAge-1.png" ></img>
+<img src="figures/ggplotObsPhysAge-1.png" ></img> Figure 1
 
 There’s a fairly evident pattern seen form the plot, however needs
 further analysis on the strength.
 
 Now plotting the same graph but for different ethnic demographic.
 
-<img src="figures/ggplotObsPhysRace-1.png" ></img>
+<img src="figures/ggplotObsPhysRace-1.png" ></img> Figure 2
 
 This plot does not give us much insight on a relationship between
 obesity levels and physical activity, however after conducting analysis
@@ -125,14 +125,14 @@ whether or not it is strong.
 
 This analysis was completed using statistical software RStudio. Package
 “tidyverse” was used for visualization and dataframe manipulation.
-Package “farway” provided function for calculation of variance inflation
-factor, which was used to assess multicollinearity. Robust regression
-model was built using “MASS” package. 3D plot was created using “plot3D”
-package, rendered with “rgl” and converted into gif format with “magick”
-package. An ordinary least squares regression model, analysis of
-variance and other basic function were performed with pre-loaded default
-packages like “base” and “stats”. Documentation of the analysis was
-written in R environment using Markdown language.
+Package “faraway” provided function for calculation of variance
+inflation factor, which was used to assess multicollinearity. Robust
+regression model was built using “MASS” package. 3D plot was created
+using “plot3D” package, rendered with “rgl” and converted into gif
+format with “magick” package. An ordinary least squares regression
+model, analysis of variance and other basic function were performed with
+pre-loaded default packages like “base” and “stats”. Documentation of
+the analysis was written in R environment using Markdown language.
 
 # Results
 
@@ -281,8 +281,11 @@ adults who have obesity.
 
 Further altering current regression model
 \(obesity =\beta_0 + \beta_1fruit + \beta_2exercise\) to be sensetive to
-a particular demographic, such as age or ethnicity. The equation now
-becomes: $ obesity =\_0 + \_1fruit + \_2exercise + \_iIndicator\_i$
+a particular demographic, such as age, ethnicity, gender, income or
+education. The equation now becomes: $ obesity =\_0 + \_1fruit +
+\_2exercise + \_iIndicator\_i$
+
+Results of the first instance where the indicator variable is Age:
 
     ## 
     ## Call:
@@ -311,100 +314,11 @@ becomes: $ obesity =\_0 + \_1fruit + \_2exercise + \_iIndicator\_i$
     ## Multiple R-squared:  0.4451, Adjusted R-squared:  0.444 
     ## F-statistic: 398.9 on 8 and 3979 DF,  p-value: < 2.2e-16
 
-![](figures/ggplotObsPhysAge-1.png)<!-- -->
+Summary of this model shows every age group to be significant. Relating
+back to Figure 1 in the data description section, particular model
+solidifies our findings.
 
-``` r
-ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, 
-    Age != "")) + ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + 
-    xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
-```
-
-![](figures/ggplotObsFruitAge-1.png)<!-- --> \# The plot indicates
-different models should be used for each age group.
-
-    ## 
-    ## Call:
-    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value47 + Gender, 
-    ##     data = total)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -28.787  -2.573   0.513   3.310  40.494 
-    ## 
-    ## Coefficients:
-    ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  10.66262    0.54668  19.504   <2e-16 ***
-    ## Data_Value18  0.19865    0.01515  13.112   <2e-16 ***
-    ## Data_Value47  0.37492    0.01350  27.781   <2e-16 ***
-    ## GenderFemale  0.33870    0.47229   0.717    0.473    
-    ## GenderMale    0.03627    0.47308   0.077    0.939    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.728 on 3983 degrees of freedom
-    ## Multiple R-squared:  0.2976, Adjusted R-squared:  0.2969 
-    ## F-statistic: 421.9 on 4 and 3983 DF,  p-value: < 2.2e-16
-
-    ## 
-    ## Call:
-    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value47 + Income, 
-    ##     data = total)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -29.346  -2.425   0.410   3.067  40.883 
-    ## 
-    ## Coefficients:
-    ##                          Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)               9.95390    0.55815  17.834  < 2e-16 ***
-    ## Data_Value18              0.19774    0.01447  13.661  < 2e-16 ***
-    ## Data_Value47              0.40168    0.01397  28.752  < 2e-16 ***
-    ## Income$15,000 - $24,999   0.05904    0.46698   0.126 0.899395    
-    ## Income$25,000 - $34,999   0.36412    0.45967   0.792 0.428339    
-    ## Income$35,000 - $49,999   1.57426    0.45722   3.443 0.000581 ***
-    ## Income$50,000 - $74,999   2.93542    0.46043   6.375 2.03e-10 ***
-    ## Income$75,000 or greater  1.56152    0.47567   3.283 0.001037 ** 
-    ## IncomeData not reported  -5.13141    0.45784 -11.208  < 2e-16 ***
-    ## IncomeLess than $15,000  -0.27993    0.47621  -0.588 0.556672    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.596 on 3978 degrees of freedom
-    ## Multiple R-squared:  0.3306, Adjusted R-squared:  0.3291 
-    ## F-statistic: 218.3 on 9 and 3978 DF,  p-value: < 2.2e-16
-
-    ## 
-    ## Call:
-    ## lm(formula = Data_Value36 ~ Data_Value18 + Data_Value47 + Education, 
-    ##     data = total)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -29.559  -2.464   0.495   3.234  40.947 
-    ## 
-    ## Coefficients:
-    ##                                           Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)                                9.77045    0.58210  16.785  < 2e-16
-    ## Data_Value18                               0.20038    0.01478  13.557  < 2e-16
-    ## Data_Value47                               0.40766    0.01441  28.284  < 2e-16
-    ## EducationCollege graduate                  0.15380    0.49183   0.313    0.755
-    ## EducationHigh school graduate             -0.64718    0.46859  -1.381    0.167
-    ## EducationLess than high school            -2.86070    0.49840  -5.740 1.02e-08
-    ## EducationSome college or technical school  2.34485    0.46429   5.050 4.61e-07
-    ##                                              
-    ## (Intercept)                               ***
-    ## Data_Value18                              ***
-    ## Data_Value47                              ***
-    ## EducationCollege graduate                    
-    ## EducationHigh school graduate                
-    ## EducationLess than high school            ***
-    ## EducationSome college or technical school ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.687 on 3981 degrees of freedom
-    ## Multiple R-squared:  0.308,  Adjusted R-squared:  0.307 
-    ## F-statistic: 295.4 on 6 and 3981 DF,  p-value: < 2.2e-16
+Applying the same concept but now indicator variable will be ethnicity.
 
     ## 
     ## Call:
@@ -447,8 +361,15 @@ different models should be used for each age group.
     ## Multiple R-squared:  0.5011, Adjusted R-squared:  0.4999 
     ## F-statistic: 399.5 on 10 and 3977 DF,  p-value: < 2.2e-16
 
-![](figures/ggplotObsPhysRace-1.png)<!-- -->
-![](figures/ggplotObsFruitRace-1.png)<!-- -->
+Even though the related Figure 2, does not suggest strong visual
+evidence that different racial demographics have strong linear
+correlation, the hypothesis test indicates otherwise for most variables.
+Most likely that is due to addition of the fruit consumption variable in
+the model, where the graph does not include it.
+
+Repeating the same procedure for other demographics to find that gender,
+income and education do not have strong evidence of a relationship
+between other variables.
 
 ## Analysis of total obesity rates for every state
 
@@ -504,18 +425,18 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-9-1.png" width="50%" /><img src="figures/unnamed-chunk-9-2.png" width="50%" />
+<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
 observations, 1% of those are expected to be potential outliers
 according Normal Distribution. Taking a look at the Cook’s distance to
 inspect any influential points, we find that gladly there aren’t any.
-Obeservation \#307 appears again with the largest Cook’s distance of
-just about 0.025. In order for the point to be considered influential,
-it’s Cook’s distance should be greater than 1.
+Observation \#307 appears again with the largest Cook’s distance of just
+about 0.025. In order for the point to be considered influential, it’s
+Cook’s distance should be greater than 1.
 
-Let’s reduce our set of obeservations to only the states that show
+Let’s reduce our set of observations to only the states that show
 significant evidence of increase obesity rates. Visualizing will also
 help us draw any conclusions.
 
@@ -534,7 +455,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
     xlab("Year") + ylab("Obesity %")
 ```
 
-![](figures/unnamed-chunk-10-1.png)<!-- --> Particular image represents
+![](figures/unnamed-chunk-11-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -580,7 +501,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-12-1.png" width="50%" /><img src="figures/unnamed-chunk-12-2.png" width="50%" />
+<img src="figures/unnamed-chunk-13-1.png" width="50%" /><img src="figures/unnamed-chunk-13-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape

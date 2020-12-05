@@ -1,7 +1,7 @@
 ---
 title: "Analysis of CDC Dataset"
-author: "Kaiyan Li, Kirill Gavrilov, Victor Wang"
-date: "28/11/2020"
+author: "Kirill Gavrilov, Kaiyan Li, Victor Wang"
+date: "04/12/2020"
 output:
   github_document:
     html_preview: false
@@ -44,18 +44,21 @@ In this study we would like to answer the following questions:
 To get a sense of what to anticipate for the upcoming analysis, we will plot classifications of interest versus obesity rates. Age category is crucial to investigate, therefore we will start by plotting this obesity rates versus physical activity for each age demographic.
 
 <img src="figures/ggplotObsPhysAge-1.png" ></img>
+Figure 1
 
 There's a fairly evident pattern seen form the plot, however needs further analysis on the strength.
 
 Now plotting the same graph but for different ethnic demographic.
 
 <img src="figures/ggplotObsPhysRace-1.png" ></img>
+Figure 2
 
 This plot does not give us much insight on a relationship between obesity levels and physical activity, however after conducting analysis we may deduce some type of pattern. 
 
 Moving on to another to investigate connection between obesity % and fruit intake again, classified by age. 
 
 <img src="figures/ggplotObsFruitAge-1.png" ></img>
+
 
 An apparent linear pattern is present between all age groups. Further analysis necessary to determine the strength. 
 
@@ -79,7 +82,7 @@ It is not evident which states are showing a positive relationship and whether o
 
 # Methods
 
-This analysis was completed using statistical software RStudio. Package "tidyverse" was used for visualization and dataframe manipulation. Package "farway" provided function for calculation of variance inflation factor, which was used to assess multicollinearity. Robust regression model was built using "MASS" package. 3D plot was created using "plot3D" package, rendered with "rgl" and converted into gif format with "magick" package. An ordinary least squares regression model, analysis of variance and other basic function were performed with pre-loaded default packages like "base" and "stats". Documentation of the analysis was written in R environment using Markdown language.
+This analysis was completed using statistical software RStudio. Package "tidyverse" was used for visualization and dataframe manipulation. Package "faraway" provided function for calculation of variance inflation factor, which was used to assess multicollinearity. Robust regression model was built using "MASS" package. 3D plot was created using "plot3D" package, rendered with "rgl" and converted into gif format with "magick" package. An ordinary least squares regression model, analysis of variance and other basic function were performed with pre-loaded default packages like "base" and "stats". Documentation of the analysis was written in R environment using Markdown language.
 
 # Results
 
@@ -196,26 +199,39 @@ preds <- predict(cross_val_model,test_data)
 error_percent<-100*abs(preds-test_data$Data_Value36)/test_data$Data_Value36
 mean(error_percent) # prediction error is around 20%
 ```
-Further altering current regression model $obesity =\beta_0 + \beta_1fruit + \beta_2exercise$ to be sensetive to a particular demographic, such as age or ethnicity. The equation now becomes: $ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i$
+Further altering current regression model $obesity =\beta_0 + \beta_1fruit + \beta_2exercise$ to be sensetive to a particular demographic, such as age, ethnicity, gender, income or education. The equation now becomes: $ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i$
+
+Results of the first instance where the indicator variable is Age:
 
 ```{r echo = FALSE}
 model_age <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Age, data=total)
 summary(model_age)
-# The result is significantly different for each age group.
 ```
-```{r ggplotObsPhysAge, echo = FALSE}
+Summary of this model shows every age group to be significant. Relating back to Figure 1 in the data description section, particular model solidifies our findings. 
+
+Applying the same concept but now indicator variable will be ethnicity.
+
+```{r echo = FALSE}
+model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, data=total)
+summary(model_race)
+```
+Even though the related Figure 2, does not suggest strong visual evidence that different racial demographics have strong linear correlation, the hypothesis test indicates otherwise for most variables. Most likely that is due to addition of the fruit consumption variable in the model, where the graph does not include it. 
+
+Repeating the same procedure for other demographics to find that gender, income and education do not have strong evidence of a relationship between other variables. 
+
+
+```{r ggplotObsPhysAge, echo = FALSE, eval = FALSE}
 ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, Age != "")) + 
   ggtitle ("Obesity Rates vs. Physical Activity for Different Age Groups") + xlab("% of adults with no physical activity") + 
   ylab("% of adults who have obesity ")
 ```
 
-```{r ggplotObsFruitAge}
+```{r ggplotObsFruitAge, echo = FALSE, eval = FALSE}
 ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Age)) + geom_point(data = subset(total, Age != "")) + 
   ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
-# The plot indicates different models should be used for each age group.
 
-```{r echo = FALSE}
+```{r echo = FALSE, eval = FALSE}
 model_gender <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Gender, data=total)
 summary(model_gender) 
 
@@ -229,12 +245,12 @@ model_race <- lm(Data_Value36 ~ Data_Value18 + Data_Value47 + Race.Ethnicity, da
 summary(model_race)
 ```
 
-```{r ggplotObsPhysRace, echo = FALSE}
+```{r ggplotObsPhysRace, echo = FALSE, eval = FALSE}
 ggplot(total, aes(x = Data_Value47, y = Data_Value36, colour = Race.Ethnicity)) + geom_point(data = subset(total, Race.Ethnicity != "")) + 
   ggtitle("Obesity Rates vs. Physical Activity for Different Ethnicities") + xlab("% of adults with no physical activity") + 
   ylab("% of adults who have obesity ")
 ```
-```{r ggplotObsFruitRace, echo = FALSE}
+```{r ggplotObsFruitRace, echo = FALSE, eval = FALSE}
 ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Race.Ethnicity)) + geom_point(data = subset(total, Race.Ethnicity != "")) + 
   ggtitle("Obesity Rates vs Fruit Intake for Different Age Groups") + xlab("% of adults with consume fruit less than one time a day") + ylab("% of adults who have obesity")
 ```
@@ -265,9 +281,9 @@ par(mar = c(4, 4, 0.1, 0.1))
 plot(model_all_states, which = c(2,2))
 plot(model_all_states, which = c(4,4))
 ```
-Standardized residuals do not look out of place for the most part. There are a couple of observations that fall out of the straight normality line like #307 and #35, however that is expected. Out of 319 observations, 1% of those are expected to be potential outliers according Normal Distribution. Taking a look at the Cook's distance to inspect any influential points, we find that gladly there aren't any. Obeservation #307 appears again with the largest Cook's distance of just about 0.025. In order for the point to be considered influential, it's Cook's distance should be greater than 1. 
+Standardized residuals do not look out of place for the most part. There are a couple of observations that fall out of the straight normality line like #307 and #35, however that is expected. Out of 319 observations, 1% of those are expected to be potential outliers according Normal Distribution. Taking a look at the Cook's distance to inspect any influential points, we find that gladly there aren't any. Observation #307 appears again with the largest Cook's distance of just about 0.025. In order for the point to be considered influential, it's Cook's distance should be greater than 1. 
 
-Let's reduce our set of obeservations to only the states that show significant evidence of increase obesity rates. Visualizing will also help us draw any conclusions. 
+Let's reduce our set of observations to only the states that show significant evidence of increase obesity rates. Visualizing will also help us draw any conclusions. 
 
 
 ```{r message = FALSE}
