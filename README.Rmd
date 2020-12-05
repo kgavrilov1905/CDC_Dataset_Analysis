@@ -357,7 +357,7 @@ Data file: https://www.kaggle.com/spittman1248/cdc-data-nutrition-physical-activ
 
 Raw Code: cdc.r
 
-Documentation: README.Rmd, README.md
+Documentation: README.Rmd, README.md, cdc.pdf
 
 # References
 

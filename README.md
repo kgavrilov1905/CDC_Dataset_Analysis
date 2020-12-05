@@ -487,7 +487,7 @@ Data file:
 
 Raw Code: cdc.r
 
-Documentation: README.Rmd, README.md
+Documentation: README.Rmd, README.md, cdc.pdf
 
 # References
 
