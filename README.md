@@ -8,20 +8,20 @@ Kirill Gavrilov, Kaiyan Li, Victor Wang
 The prevalence of obesity has increased in the United States in the past
 decades<sup>1</sup>. A wide range of medical complications of obesity,
 such as diabetes, hypertension, heart disease, respiratory disease,
-significantly reduced patients’ quality of \(life^2\). This statistical
-analysis provides time trends for adults over 18 years old are
-classified to have obesity (body mass index (BMI) \> 30) from 2011-2016,
-using data from Center for Disease Control and Prevention (CDC).
-Moreover, the data is inspected with respect to the food intake and
-physical activity levels.
+significantly reduced patients’ quality of life<sup>2</sup>. This
+statistical analysis provides time trends for adults over 18 years old
+are classified to have obesity (body mass index (BMI) \> 30) from
+2011-2016, using data from Center for Disease Control and Prevention
+(CDC). Moreover, the data is inspected with respect to the food intake
+and physical activity levels.
 
 # Introduction
 
 Over the last three decades, mean body mass index (BMI; kg/m2) has
-increased by 0.4 kg/m2 per \(decade^3\). The United States has the
+increased by 0.4 kg/m2 per decade<sup>3</sup>. The United States has the
 highest mean BMI among high-income countries, leading to one in four
 adults having a BMI \> 30 kg/m2 based on self-reported height and
-\(weight^4\). This study analyses data from the Center for Disease
+weight<sup>4</sup>. This study analyses data from the Center for Disease
 Control and Prevention (CDC) collected over 6 years from 2011-2016 in
 all states of America. Each data point represents a proportion of people
 that fall under a particular demographic. Individuals are classified
@@ -247,9 +247,9 @@ summary(model)
 
 All variables still remain significant in the model and R-squared is a
 bit higher as well. Updated linear regression model now becomes:
-\[obesity =\beta_0 + \beta_1fruit + \beta_2vegetable\]. Following,
-variance inflation factor is calculated to ensure multicollinearity is
-not present in the equation.
+\*\*\*obesity = β<sub>0</sub> + \_1fruit + \_2vegetable\*\*\*.
+Following, variance inflation factor is calculated to ensure
+multicollinearity is not present in the equation.
 
 ``` r
 vif(model)
@@ -487,3 +487,25 @@ Data file:
 Raw Code: cdc.r
 
 Documentation: README.Rmd, README.md
+
+# References
+
+1.  Flegal, Katherine M, Carroll, Margaret D, Ogden, Cynthia L, &
+    Curtin, Lester R. (2010). Prevalence and Trends in Obesity Among US
+    Adults, 1999-2008. JAMA : the Journal of the American Medical
+    Association, 303(3), 235–241.
+    <https://doi.org/10.1001/jama.2009.2014>
+
+2.  Malnick, S. D. . (2006). The medical complications of obesity. QJM :
+    Monthly Journal of the Association of Physicians, 99(9), 565–579.
+    <https://doi.org/10.1093/qjmed/hcl085>
+
+3.  Finucane MM, Stevens GA, Cowan MJ, Danaei G, Lin JK, Paciorek CJ et
+    al. National, regional, and global trends in body-mass index since
+    1980: systematic analysis of health examination surveys and
+    epidemiological studies with 960 country-years and 9.1 million
+    participants. Lancet 2011; 377: 557–567.
+
+4.  Centers for Disease Control and Prevention (CDC). Vital signs:
+    state-specific obesity prevalence among adult—United States, 2009.
+    MMWR Morb Mortal Wkly Rep 2010; 59: 951–955.
