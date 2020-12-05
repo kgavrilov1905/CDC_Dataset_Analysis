@@ -393,7 +393,7 @@ plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-10-1.png" width="50%" /><img src="figures/unnamed-chunk-10-2.png" width="50%" />
+<img src="figures/ModelObsYearRes-1.png" width="50%" /><img src="figures/ModelObsYearRes-2.png" width="50%" />
 Standardized residuals do not look out of place for the most part. There
 are a couple of observations that fall out of the straight normality
 line like \#307 and \#35, however that is expected. Out of 319
@@ -408,7 +408,7 @@ Let’s reduce our set of observations to only the states that show
 significant evidence of increase obesity rates. Visualizing will also
 help us draw any conclusions.
 
-![](figures/unnamed-chunk-11-1.png)<!-- --> Particular image represents
+![](figures/ggplotYearFinal-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey
 colour are the states that do not show significant increase in obesity
 rates in 6 years. That was deducted by building an individual linear
@@ -454,7 +454,7 @@ plot(model_updated, which = c(2, 2))
 plot(model_updated, which = c(4, 4))
 ```
 
-<img src="figures/unnamed-chunk-13-1.png" width="50%" /><img src="figures/unnamed-chunk-13-2.png" width="50%" />
+<img src="figures/unnamed-chunk-11-1.png" width="50%" /><img src="figures/unnamed-chunk-11-2.png" width="50%" />
 Taking a look at the updated model for obesity rates over the years,
 there’s a substantial increase in the value of intercept coefficient and
 slope remains relatively the same. Residuals appear to be in good shape

@@ -287,7 +287,7 @@ ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line() +
   ggtitle("2011-2016 Obesity Rates By State") + xlab("Year") + ylab("% of adults who have obesity")
 ```
 
-```{r fig.show = "hold", out.width = "50%"}
+```{r fig.show = "hold", out.width = "50%", ModelObsYearRes}
 par(mar = c(4, 4, 0.1, 0.1))
 plot(model_all_states, which = c(2,2))
 plot(model_all_states, which = c(4,4))
@@ -297,7 +297,7 @@ Standardized residuals do not look out of place for the most part. There are a c
 Let's reduce our set of observations to only the states that show significant evidence of increase obesity rates. Visualizing will also help us draw any conclusions. 
 
 
-```{r message = FALSE, echo = FALSE}
+```{r ggplotYearFinal, message = FALSE, echo = FALSE}
 #ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line()
 
 reg_coef_all_states = Q36 %>% group_by(Location) %>%
