@@ -476,4 +476,6 @@ that have relatively low obesity rates in 2011, tend to maintain that
 trend and hold obesity rates constant. On the other hand, states with
 higher obesity rates initially, show evidence of increasing rates.
 
-# Apendix
+# Appendix
+
+See the repository above.

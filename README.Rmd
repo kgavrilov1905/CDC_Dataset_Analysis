@@ -346,9 +346,9 @@ movie3d(movie = "AnimatedGraph", spin3d(axis = c(0, 0, 1), rpm = 2), duration = 
 
 Significant number of people battle obesity without consulting a medical professional. There are many reasons for that, however the biggest one failing to recognize the medical condition and consider themselves overweight, but not obese. Therefore, linear regression models that were introduced in this study are bound to have discrepancies. Regarding the first objective of understanding the relationship between obesity rates, fruit/vegetable intake and physical activity in the United States, the relative rate of increase varies across population subgroups. Some demographic categories like age and ethnicity show stronger evidence of a relationship with desired variables than others, leading to a better fitting and predicting model. Concerning the total obesity rates across each states, the study has shown that 23/50 states have shown significant evidence towards increasing obesity rates.Moreover, states that have relatively low obesity rates in 2011, tend to maintain that trend and hold obesity rates constant. On the other hand, states with higher obesity rates initially, show evidence of increasing rates. 
 
-# Apendix
+# Appendix
 
-
+See the repository above.
 
 
 
