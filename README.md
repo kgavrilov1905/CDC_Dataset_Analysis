@@ -183,8 +183,9 @@ further information is available in the appendix.
 
 We now want to analyze the ordinary least squares model that relates
 obesity rates to people who report eating fruit and vegetable less than
-1 time a day and engage in no physical activity.
-\[obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise\]
+1 time a day and engage in no physical activity. ***obesity =
+β<sub>0</sub> + β<sub>1</sub>fruit + β<sub>2</sub>vegetable +
+β<sub>3</sub>exercise***
 
 ``` r
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data = total)
@@ -247,9 +248,9 @@ summary(model)
 
 All variables still remain significant in the model and R-squared is a
 bit higher as well. Updated linear regression model now becomes:
-\*\*\*obesity = β<sub>0</sub> + \_1fruit + \_2vegetable\*\*\*.
-Following, variance inflation factor is calculated to ensure
-multicollinearity is not present in the equation.
+***obesity = β<sub>0</sub> + β<sub>1</sub>fruit +
+β<sub>2</sub>exercise***. Following, variance inflation factor is
+calculated to ensure multicollinearity is not present in the equation.
 
 ``` r
 vif(model)
@@ -293,11 +294,11 @@ the model. Even though the R-squared value of the current model is
 0.2975, mean prediction error turned out to be 20.86% for the percent of
 adults who have obesity.
 
-Further altering current regression model
-\[obesity =\beta_0 + \beta_1fruit + \beta_2exercise\] to be sensetive to
-a particular demographic, such as age, ethnicity, gender, income or
-education. The equation now becomes:
-\[ obesity =\beta_0 + \beta_1fruit + \beta_2exercise + \beta_iIndicator_i\]
+Further altering current regression model ***obesity = β<sub>0</sub> +
+β<sub>1</sub>fruit + β<sub>2</sub>exercise*** to be sensitive to a
+particular demographic, such as age, ethnicity, gender, income or
+education. The equation now becomes: ***obesity = β<sub>0</sub> +
+β<sub>1</sub>fruit + β<sub>2</sub>exercise + β<sub>3</sub>indicator***
 
 Results of the first instance where the indicator variable is Age:
 
@@ -364,7 +365,7 @@ to the year in order to conclude growing obesity rate in the country.
 Specifically, we will look at the “Total” category which represents the
 final obesity percentage for each state in a particular year.
 
-\[ obesity =\beta_0 + \beta_1year + \epsilon\]
+***obesity = β<sub>0</sub> + β<sub>1</sub>year + ε***
 
     ## 
     ## Call:
