@@ -478,4 +478,12 @@ higher obesity rates initially, show evidence of increasing rates.
 
 # Appendix
 
-See the repository above.
+Repository containing all the files:
+<https://github.com/kgavrilov1905/stat350finalproject>
+
+Data file:
+<https://www.kaggle.com/spittman1248/cdc-data-nutrition-physical-activity-obesity>
+
+Raw Code: cdc.r
+
+Documentation: README.Rmd, README.md
