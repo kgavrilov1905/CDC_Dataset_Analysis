@@ -99,12 +99,16 @@ fruit intake again, classified by age.
 
 <img src="figures/ggplotObsFruitAge-1.png" ></img>
 
+Figure 3
+
 An apparent linear pattern is present between all age groups. Further
 analysis necessary to determine the strength.
 
 Plotting the same graph but for different ethnic demographic.
 
 <img src="figures/ggplotObsFruitRace-1.png" ></img>
+
+Figure 4
 
 Once again, racial classification does not seem to give us any type of
 insight.
@@ -115,12 +119,16 @@ plotted.
 
 <img src="figures/AnimatedGraph.gif" ></img>
 
+Figure 5
+
 -----
 
 To answer the second question, visualization of obesity rates per year
 is the most appropriate way to understand what data we are dealing with.
 
 <img src="figures/ggplotObsYear-1.png" ></img>
+
+Figure 6
 
 It is not evident which states are showing a positive relationship and
 whether or not it is strong.
@@ -356,15 +364,6 @@ final obesity percentage for each state in a particular year.
 
 \[ obesity =\beta_0 + \beta_1year + \epsilon\]
 
-``` r
-Q36 = Q36 %>% dplyr::select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, 
-    Total) %>% arrange(Location)
-Q36[Q36 == ""] = NA
-Q36 = Q36 %>% drop_na()
-model_all_states = lm(Data_Value36 ~ Year, data = Q36)
-summary(model_all_states)
-```
-
     ## 
     ## Call:
     ## lm(formula = Data_Value36 ~ Year, data = Q36)
@@ -389,13 +388,6 @@ significant relationship between obesity rates and year, however the
 R-squared is extremely low. Let’s take a look at the residuals.
 
 ``` r
-ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line() + ggtitle("2011-2016 Obesity Rates By State") + 
-    xlab("Year") + ylab("% of adults who have obesity")
-```
-
-![](figures/ggplotObsYear-1.png)<!-- -->
-
-``` r
 par(mar = c(4, 4, 0.1, 0.1))
 plot(model_all_states, which = c(2, 2))
 plot(model_all_states, which = c(4, 4))
@@ -415,21 +407,6 @@ Cook’s distance should be greater than 1.
 Let’s reduce our set of observations to only the states that show
 significant evidence of increase obesity rates. Visualizing will also
 help us draw any conclusions.
-
-``` r
-# ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line()
-
-reg_coef_all_states = Q36 %>% group_by(Location) %>% summarize(slope = lm(Data_Value36 ~ 
-    Year)$coef["Year"], pvalue = coef(summary(lm(Data_Value36 ~ Year)))[2, 4])
-
-Q36_reduced = reg_coef_all_states %>% filter(pvalue < 0.05) %>% left_join(Q36)
-
-ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), colour = "grey", 
-    alpha = 0.4) + geom_smooth(Q36_reduced, mapping = aes(x = Year, y = Data_Value36), 
-    colour = "red") + geom_line(Q36_reduced, mapping = aes(x = Year, y = Data_Value36, 
-    colour = Location), alpha = 0.35) + geom_smooth(colour = "black") + ggtitle("2011-2016 National Obesity Rates") + 
-    xlab("Year") + ylab("Obesity %")
-```
 
 ![](figures/unnamed-chunk-11-1.png)<!-- --> Particular image represents
 total obesity rates graph of observations for all states. Lines in grey

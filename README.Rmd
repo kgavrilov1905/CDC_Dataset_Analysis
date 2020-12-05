@@ -61,6 +61,8 @@ Moving on to another to investigate connection between obesity % and fruit intak
 
 <img src="figures/ggplotObsFruitAge-1.png" ></img>
 
+Figure 3
+
 
 An apparent linear pattern is present between all age groups. Further analysis necessary to determine the strength. 
 
@@ -68,17 +70,23 @@ Plotting the same graph but for different ethnic demographic.
 
 <img src="figures/ggplotObsFruitRace-1.png" ></img>
 
+Figure 4
+
 Once again, racial classification does not seem to give us any type of insight. 
 
 To help us further visualize mandatory data, a 3D plot of obesity percentages, fruit consumption and physical activity levels were plotted.
 
 <img src="figures/AnimatedGraph.gif" ></img>
 
+Figure 5
+
 - - - - 
 
 To answer the second question, visualization of obesity rates per year is the most appropriate way to understand what data we are dealing with. 
 
 <img src="figures/ggplotObsYear-1.png" ></img>
+
+Figure 6
 
 It is not evident which states are showing a positive relationship and whether or not it is strong. 
 
@@ -264,8 +272,7 @@ ggplot(total, aes(x = Data_Value18, y = Data_Value36, colour = Race.Ethnicity)) 
 Analyzing the ordinary least squares model of how obesity rates relate to the year in order to conclude growing obesity rate in the country. Specifically, we will look at the "Total" category which represents the final obesity percentage for each state in a particular year.
 
 $$ obesity =\beta_0 + \beta_1year + \epsilon$$
-```{r}
-
+```{r echo = FALSE}
 Q36 = Q36 %>% dplyr::select(Year, Location, Class36, Question36, Data_Value36, Sample_Size36, Total) %>% arrange(Location)
 Q36[Q36 == ""] = NA
 Q36 = Q36 %>% drop_na()
@@ -275,7 +282,7 @@ summary(model_all_states)
 
 P-value for the model does seem to indicated that there's evidence of significant relationship between obesity rates and year, however the R-squared is extremely low. Let's take a look at the residuals.
 
-```{r ggplotObsYear, fig.width = 10}
+```{r ggplotObsYear, fig.width = 10, echo = FALSE, eval = FALSE}
 ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line() +
   ggtitle("2011-2016 Obesity Rates By State") + xlab("Year") + ylab("% of adults who have obesity")
 ```
@@ -290,7 +297,7 @@ Standardized residuals do not look out of place for the most part. There are a c
 Let's reduce our set of observations to only the states that show significant evidence of increase obesity rates. Visualizing will also help us draw any conclusions. 
 
 
-```{r message = FALSE}
+```{r message = FALSE, echo = FALSE}
 #ggplot(Q36, aes(x = Year, y = Data_Value36, colour = Location)) + geom_line()
 
 reg_coef_all_states = Q36 %>% group_by(Location) %>%
