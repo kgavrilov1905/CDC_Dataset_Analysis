@@ -179,6 +179,8 @@ cdc_adjusted[28, 6] = 64
 Other tedious dataframe transformations were omitted from the report and
 further information is available in the appendix.
 
+## Analysis of obesity rates, fruit/vegetable intake and physical activity
+
 We now want to analyze the ordinary least squares model that relates
 obesity rates to people who report eating fruit and vegetable less than
 1 time a day and engage in no physical activity.
@@ -418,12 +420,6 @@ contrary, coloured lines indicate growing obesity rates. Further more,
 red and black lines show the full model slope for both, all states and
 states with growing obesity rates respectively.
 
-We can investigate this further by looking more closely at the
-observations. States that have relatively low obesity rates in 2011,
-tend to maintain that trend and hold obesity rates constant. On the
-other hand, states with higher obesity rates initially, show evidence of
-increasing rates.
-
 ``` r
 model_updated = lm(Data_Value36 ~ Year, data = Q36_reduced)
 summary(model_updated)
@@ -461,4 +457,23 @@ slope remains relatively the same. Residuals appear to be in good shape
 with slight deviation from the Normal line and do not violate the
 independence assumption.
 
-3D plot
+# Conclusion
+
+Significant number of people battle obesity without consulting a medical
+professional. There are many reasons for that, however the biggest one
+failing to recognize the medical condition and consider themselves
+overweight, but not obese. Therefore, linear regression models that were
+introduced in this study are bound to have discrepancies. Regarding the
+first objective of understanding the relationship between obesity rates,
+fruit/vegetable intake and physical activity in the United States, the
+relative rate of increase varies across population subgroups. Some
+demographic categories like age and ethnicity show stronger evidence of
+a relationship with desired variables than others, leading to a better
+fitting and predicting model. Concerning the total obesity rates across
+each states, the study has shown that 23/50 states have shown
+significant evidence towards increasing obesity rates.Moreover, states
+that have relatively low obesity rates in 2011, tend to maintain that
+trend and hold obesity rates constant. On the other hand, states with
+higher obesity rates initially, show evidence of increasing rates.
+
+# Apendix

@@ -152,6 +152,7 @@ total <- total%>% select(-Class18,-Class19,-Class36,-Class47, -Question18,-Quest
 ```
 Other tedious dataframe transformations were omitted from the report and further information is available in the appendix.
 
+## Analysis of obesity rates, fruit/vegetable intake and physical activity
 We now want to analyze the ordinary least squares model that relates obesity rates to people who report eating fruit and vegetable less than 1 time a day and engage in no physical activity. $obesity =\beta_0 + \beta_1fruit + \beta_2vegetable + \beta_3exercise$
 ```{r OriginalModel}
 model <- lm(Data_Value36 ~ Data_Value18 + Data_Value19 + Data_Value47, data=total)
@@ -314,8 +315,6 @@ ggplot(Q36, aes(x = Year, y = Data_Value36)) + geom_line(aes(group = Location), 
 ```
 Particular image represents total obesity rates graph of observations for all states. Lines in grey colour are the states that do not show significant increase in obesity rates in 6 years. That was deducted by building an individual linear model for each state versus year. If the p-value was greater than 0.05, that state is considered to not have increasing obesity rates. In contrary, coloured lines indicate growing obesity rates. Further more, red and black lines show the full model slope for both, all states and states with growing obesity rates respectively. 
 
-We can investigate this further by looking more closely at the observations. States that have relatively low obesity rates in 2011, tend to maintain that trend and hold obesity rates constant. On the other hand, states with higher obesity rates initially, show evidence of increasing rates.
-
 ```{r}
 model_updated = lm(Data_Value36 ~ Year, data = Q36_reduced)
 summary(model_updated)
@@ -329,8 +328,6 @@ plot(model_updated, which = c(4,4))
 ```
 Taking a look at the updated model for obesity rates over the years, there's a substantial increase in the value of intercept coefficient and slope remains relatively the same. Residuals appear to be in good shape with slight deviation from the Normal line and do not violate the independence assumption. 
 
-
-3D plot
 ```{r eval = FALSE, echo = FALSE}
 # Test if the points form a plane in a 3D space.
 library(plot3D)
@@ -344,6 +341,12 @@ plot3d(total$Data_Value18, total$Data_Value47, total$Data_Value36, xlab='Fruit',
 play3d(spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10)
 movie3d(movie = "AnimatedGraph", spin3d(axis = c(0, 0, 1), rpm = 2), duration = 10, dir = "~/Desktop", type = "gif", clean = TRUE)
 ```
+
+# Conclusion 
+
+Significant number of people battle obesity without consulting a medical professional. There are many reasons for that, however the biggest one failing to recognize the medical condition and consider themselves overweight, but not obese. Therefore, linear regression models that were introduced in this study are bound to have discrepancies. Regarding the first objective of understanding the relationship between obesity rates, fruit/vegetable intake and physical activity in the United States, the relative rate of increase varies across population subgroups. Some demographic categories like age and ethnicity show stronger evidence of a relationship with desired variables than others, leading to a better fitting and predicting model. Concerning the total obesity rates across each states, the study has shown that 23/50 states have shown significant evidence towards increasing obesity rates.Moreover, states that have relatively low obesity rates in 2011, tend to maintain that trend and hold obesity rates constant. On the other hand, states with higher obesity rates initially, show evidence of increasing rates. 
+
+# Apendix
 
 
 
