@@ -331,7 +331,8 @@ Results of the first instance where the indicator variable is Age:
 
 Summary of this model shows every age group to be significant. Relating
 back to Figure 1 in the data description section, particular model
-solidifies our findings.
+solidifies our findings. The increasing coefficients of age group
+indicates obesity rate rises as people get older.
 
 Applying the same concept but now indicator variable will be ethnicity.
 
@@ -352,11 +353,16 @@ Even though the related Figure 2, does not suggest strong visual
 evidence that different racial demographics have strong linear
 correlation, the hypothesis test indicates otherwise for most variables.
 Most likely that is due to addition of the fruit consumption variable in
-the model, where the graph does not include it.
+the model, where the graph does not include it. Hawaiian and Pacific
+Islander has the highest coefficient, which indicates this ethnicity has
+the highest obesity rate controlling for the fruit intake and physical
+activity levels.
 
-Repeating the same procedure for other demographics to find that gender,
-income and education do not have strong evidence of a relationship
-between other variables.
+Repeating the same procedure for other demographics to find that income
+and education also have strong evidence of a relationship between other
+variables, whereas gender does not. From the summary of these models,
+people with higher income, and people with some college or technical
+school education are more likely to have obesity.
 
 ## Analysis of total obesity rates for every state
 
@@ -472,7 +478,7 @@ demographic categories like age and ethnicity show stronger evidence of
 a relationship with desired variables than others, leading to a better
 fitting and predicting model. Concerning the total obesity rates across
 each states, the study has shown that 23/50 states have shown
-significant evidence towards increasing obesity rates.Moreover, states
+significant evidence towards increasing obesity rates. Moreover, states
 that have relatively low obesity rates in 2011, tend to maintain that
 trend and hold obesity rates constant. On the other hand, states with
 higher obesity rates initially, show evidence of increasing rates.
