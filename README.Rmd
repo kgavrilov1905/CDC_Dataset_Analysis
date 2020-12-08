@@ -1,7 +1,7 @@
 ---
 title: "Analysis of CDC Dataset"
 author: "Kirill Gavrilov, Kaiyan Li, Victor Wang"
-date: "04/12/2020"
+date: "08/12/2020"
 output:
   github_document:
     html_preview: false
@@ -41,6 +41,8 @@ In this study we would like to answer the following questions:
 
 1. Is there relationship between *obesity rates* and *fruit/vegetable intake alongside physical activity*?
 2. Is there significant evidence that *obesity rates* in the USA are growing? If so, for which states? 
+
+A new point was added to the dataset to make it unique. Since we are mainly going to be working with the obesity percentage data points, we will fill in the missing value for obesity % in Alabama in 2011, specifically for "Other" ethnicity. Particular value was chosen by looking at near by states at that year for that demographic. 
 
 To get a sense of what to anticipate for the upcoming analysis, we will plot classifications of interest versus obesity rates. Age category is crucial to investigate, therefore we will start by plotting this obesity rates versus physical activity for each age demographic.
 
@@ -97,7 +99,7 @@ This analysis was completed using statistical software RStudio. Package "tidyver
 
 # Results
 
-Firstly we need to analyze the original dataset, remove all the unnecessary variables and observations, add a new point to the dataset to make it unique. Since we are mainly going to be working with the obesity percentage data points, we will fill in the missing value for obesity % in Alabama in 2011, specifically for "Other" ethnicity. Particular value was chosen by looking at near by states at that year for that demographic. 
+Firstly we need to analyze the original dataset, remove all the unnecessary variables and observations.
 ```{r message = FALSE}
 library(tidyverse)
 library(faraway)

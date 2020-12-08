@@ -1,7 +1,7 @@
 Analysis of CDC Dataset
 ================
 Kirill Gavrilov, Kaiyan Li, Victor Wang
-04/12/2020
+08/12/2020
 
 # Abstract
 
@@ -71,6 +71,12 @@ In this study we would like to answer the following questions:
     intake alongside physical activity*?
 2.  Is there significant evidence that *obesity rates* in the USA are
     growing? If so, for which states?
+
+A new point was added to the dataset to make it unique. Since we are
+mainly going to be working with the obesity percentage data points, we
+will fill in the missing value for obesity % in Alabama in 2011,
+specifically for “Other” ethnicity. Particular value was chosen by
+looking at near by states at that year for that demographic.
 
 To get a sense of what to anticipate for the upcoming analysis, we will
 plot classifications of interest versus obesity rates. Age category is
@@ -149,12 +155,7 @@ the analysis was written in R environment using Markdown language.
 # Results
 
 Firstly we need to analyze the original dataset, remove all the
-unnecessary variables and observations, add a new point to the dataset
-to make it unique. Since we are mainly going to be working with the
-obesity percentage data points, we will fill in the missing value for
-obesity % in Alabama in 2011, specifically for “Other” ethnicity.
-Particular value was chosen by looking at near by states at that year
-for that demographic.
+unnecessary variables and observations.
 
 ``` r
 library(tidyverse)
