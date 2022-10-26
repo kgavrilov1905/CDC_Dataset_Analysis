@@ -15,7 +15,7 @@ are classified to have obesity (body mass index (BMI) \> 30) from
 (CDC). Moreover, the data is inspected with respect to the food intake
 and physical activity levels.
 
-# Introduction
+# Introductions
 
 Over the last three decades, mean body mass index (BMI; kg/m2) has
 increased by 0.4 kg/m2 per decade<sup>3</sup>. The United States has the
